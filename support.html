@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support — AudioVibe by Alpha Tech Labs</title>
+  <meta name="description" content="Get help with AudioVibe. Account issues, audio playback, uploads, bug reports and contact information." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan: #06b6d4; --purple: #a855f7;
+      --bg-darkest: #0a0a0a; --bg-card: #1a1a1a;
+      --border: #27272a; --border-light: #3f3f46;
+      --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-darkest); color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-darkest); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.07; }
+    .orb-1 { width: 500px; height: 500px; background: var(--cyan); top: -200px; left: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: var(--purple); bottom: -100px; right: -100px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-waveform { display: flex; align-items: center; gap: 3px; height: 24px; }
+    .nav-bar {
+      width: 3px; border-radius: 99px;
+      background: linear-gradient(to top, var(--cyan), var(--purple));
+      animation: wave 1.4s ease-in-out infinite;
+    }
+    .nav-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+    .nav-bar:nth-child(2) { height: 70%; animation-delay: 0.1s; }
+    .nav-bar:nth-child(3) { height: 100%; animation-delay: 0.2s; }
+    .nav-bar:nth-child(4) { height: 60%; animation-delay: 0.3s; }
+    .nav-bar:nth-child(5) { height: 45%; animation-delay: 0.4s; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.4); }
+    }
+    .nav-brand {
+      font-size: 0.9rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-back {
+      font-size: 0.85rem; color: var(--text-muted); text-decoration: none;
+      display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--cyan); }
+
+    .page-wrapper {
+      position: relative; z-index: 1;
+      max-width: 760px; margin: 0 auto; padding: 100px 5% 80px;
+    }
+    .page-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
+      padding: 5px 14px; border-radius: 99px;
+      border: 1px solid rgba(168,85,247,0.3); background: rgba(168,85,247,0.08);
+      font-size: 0.75rem; font-weight: 700; color: var(--purple);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900;
+      letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-lead { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 12px; }
+    .page-meta { font-size: 0.85rem; color: var(--text-muted); }
+    .page-meta span { color: var(--cyan); }
+
+    .section {
+      margin-bottom: 16px; padding: 28px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+      position: relative; overflow: hidden; transition: border-color 0.2s;
+    }
+    .section:hover { border-color: var(--border-light); }
+    .section-num {
+      position: absolute; top: 20px; right: 20px;
+      font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+      font-family: monospace; letter-spacing: 0.05em;
+    }
+    h2 {
+      font-size: 1rem; font-weight: 700; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px; color: var(--text-primary);
+    }
+    .h2-icon {
+      width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(168,85,247,0.2));
+      border: 1px solid rgba(6,182,212,0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+    p { font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+    ul { padding-left: 0; list-style: none; margin-bottom: 12px; }
+    ul li {
+      font-size: 0.92rem; color: var(--text-secondary);
+      padding: 6px 0 6px 20px; position: relative;
+    }
+    ul li::before {
+      content: ''; position: absolute; left: 0; top: 14px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+    }
+    strong { color: var(--text-primary); font-weight: 600; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .email-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px; margin-top: 8px;
+    }
+    .email-card {
+      padding: 14px 16px; border-radius: 10px;
+      background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.18);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .email-card:hover { border-color: rgba(6,182,212,0.4); background: rgba(6,182,212,0.08); }
+    .email-card-label {
+      font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .email-card a {
+      font-size: 0.88rem; font-weight: 600; color: var(--cyan);
+      word-break: break-all;
+    }
+
+    .contact-box {
+      margin-top: 12px; padding: 16px; border-radius: 10px;
+      background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.15);
+    }
+
+    .response-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+      border-radius: 99px; background: rgba(168,85,247,0.1);
+      border: 1px solid rgba(168,85,247,0.25);
+      font-size: 0.75rem; font-weight: 700; color: var(--purple);
+      letter-spacing: 0.05em; margin-bottom: 8px;
+    }
+
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border); padding: 28px 5%;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-brand {
+      font-size: 0.85rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 18px; align-items: center; }
+    .footer-links a { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cyan); }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+</div>
+
+<nav>
+  <a href="https://audiovibe.co" class="nav-logo">
+    <div class="nav-waveform">
+      <div class="nav-bar"></div><div class="nav-bar"></div><div class="nav-bar"></div>
+      <div class="nav-bar"></div><div class="nav-bar"></div>
+    </div>
+    <span class="nav-brand">Alpha Tech Labs</span>
+  </a>
+  <a href="https://audiovibe.co" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-badge">Help &amp; Support</div>
+    <h1><span class="gradient-text">Support Center</span></h1>
+    <p class="page-lead">
+      We're here to help. Whether you're stuck signing in, hit a bug, or want to delete your account, the right contact is below.
+    </p>
+    <div class="page-meta">App: <span>AudioVibe</span> &nbsp;&middot;&nbsp; Developer: <span>Alpha Tech Labs Ltd</span> &nbsp;&middot;&nbsp; Updated: <span>May 2026</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      How to Reach Us
+    </h2>
+    <p>Pick the address that matches your topic so we can route your message to the right team. We read every email.</p>
+    <div class="email-grid">
+      <div class="email-card">
+        <div class="email-card-label">General Inquiries</div>
+        <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a>
+      </div>
+      <div class="email-card">
+        <div class="email-card-label">iOS Support</div>
+        <a href="mailto:iosusersupport@audiovibe.co">iosusersupport@audiovibe.co</a>
+      </div>
+      <div class="email-card">
+        <div class="email-card-label">Android Support</div>
+        <a href="mailto:androidusersupport@audiovibe.co">androidusersupport@audiovibe.co</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      Response Time
+    </h2>
+    <span class="response-pill">Typically within 48 hours</span>
+    <p>We aim to reply to every support email within two business days. Critical account or safety issues are prioritised.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      Account &amp; Sign-In
+    </h2>
+    <p>If you cannot sign in, try the following first:</p>
+    <ul>
+      <li>Confirm you have the latest version of AudioVibe installed</li>
+      <li>Use the "Forgot password" flow on the sign-in screen to reset your password</li>
+      <li>Check the email address you registered with — we send password reset links there</li>
+      <li>If you signed up with Google, use the same Google account to sign in</li>
+    </ul>
+    <p>Still locked out? Email us with your registered email or username so we can verify your identity.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+      Audio &amp; Playback
+    </h2>
+    <p>Audio not playing or sounding off?</p>
+    <ul>
+      <li>Check your device volume and silent switch</li>
+      <li>Make sure AudioVibe has audio output permissions (Settings on your device)</li>
+      <li>Try switching between Wi-Fi and mobile data — slow networks can cause buffering</li>
+      <li>Restart the app fully (swipe it away from recent apps and reopen)</li>
+    </ul>
+    <p>If the issue persists, tell us the audio title, your device model and OS version when you write in.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      Uploading Audio
+    </h2>
+    <p>Uploads have file-size and duration limits to keep things smooth:</p>
+    <ul>
+      <li>Audio cards and short clips: up to 5 minutes per file</li>
+      <li>Series episodes: up to 1 hour per file</li>
+      <li>Supported formats: standard audio (MP3, AAC, M4A, WAV) and video that we extract audio from</li>
+    </ul>
+    <p>If an upload fails, double-check your file size and try again on a stable connection.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      Notifications
+    </h2>
+    <p>Not getting notifications?</p>
+    <ul>
+      <li>Allow notifications for AudioVibe in your device settings</li>
+      <li>Check that you haven't muted specific notification types in the in-app Notifications settings</li>
+      <li>For background delivery, ensure battery optimisation isn't restricting AudioVibe</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+      Delete Your Account
+    </h2>
+    <p>You can request deletion of your AudioVibe account and all associated data at any time.</p>
+    <p>Email <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a> from your registered email address with the subject line <strong>"Delete my account"</strong>. We will confirm the request and complete deletion within 30 days, in line with applicable law.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">08</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></div>
+      Report a Bug
+    </h2>
+    <p>When reporting a bug, please include:</p>
+    <ul>
+      <li>What you were doing when it happened (steps to reproduce)</li>
+      <li>What you expected vs. what actually happened</li>
+      <li>Your device model and OS version (e.g., iPhone 13, iOS 18.4)</li>
+      <li>The app version (Settings &rarr; About in AudioVibe)</li>
+      <li>A screenshot or screen recording if possible</li>
+    </ul>
+    <p>Send to the platform-specific address above so we can route it to the right engineer.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">09</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></div>
+      Business &amp; Press
+    </h2>
+    <p>For partnerships, press inquiries, advertising or business development, please write to <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a> and we will direct your message to the right person.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-num">10</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      Legal &amp; Privacy
+    </h2>
+    <p>For privacy questions, data requests, or to review how we handle your information, see our <a href="privacy.html">Privacy Policy</a>.</p>
+    <div class="contact-box">
+      <p style="margin:0"><strong>Alpha Tech Labs Ltd</strong><br/>
+      38 Lincoln Apartments, 3 Lexington Gardens<br/>
+      Birmingham, England, B15 2DS<br/>
+      Registered in England &amp; Wales</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-brand">Alpha Tech Labs Ltd</div>
+    <div class="footer-copy">© 2026 Alpha Tech Labs Ltd. Registered in England &amp; Wales.</div>
+  </div>
+  <div class="footer-links">
+    <a href="https://audiovibe.co">Home</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</footer>
+
+</body>
+</html>
