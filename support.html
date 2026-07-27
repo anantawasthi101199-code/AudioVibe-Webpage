@@ -8,7 +8,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --cyan: #06b6d4; --purple: #a855f7;
+      --blue: #22d3ee; --blue-deep: #1f74ec;
       --bg-darkest: #0a0a0a; --bg-card: #1a1a1a;
       --border: #27272a; --border-light: #3f3f46;
       --text-primary: #ffffff; --text-secondary: #a1a1aa; --text-muted: #71717a;
@@ -25,8 +25,8 @@
 
     .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.07; }
-    .orb-1 { width: 500px; height: 500px; background: var(--cyan); top: -200px; left: -100px; }
-    .orb-2 { width: 400px; height: 400px; background: var(--purple); bottom: -100px; right: -100px; }
+    .orb-1 { width: 500px; height: 500px; background: var(--blue); top: -200px; left: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: var(--blue-deep); bottom: -100px; right: -100px; }
 
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -39,7 +39,7 @@
     .nav-waveform { display: flex; align-items: center; gap: 3px; height: 24px; }
     .nav-bar {
       width: 3px; border-radius: 99px;
-      background: linear-gradient(to top, var(--cyan), var(--purple));
+      background: linear-gradient(to top, var(--blue), var(--blue-deep));
       animation: wave 1.4s ease-in-out infinite;
     }
     .nav-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
@@ -52,14 +52,14 @@
     }
     .nav-brand {
       font-size: 0.9rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .nav-back {
       font-size: 0.85rem; color: var(--text-muted); text-decoration: none;
       display: flex; align-items: center; gap: 6px; transition: color 0.2s;
     }
-    .nav-back:hover { color: var(--cyan); }
+    .nav-back:hover { color: var(--blue); }
 
     .page-wrapper {
       position: relative; z-index: 1;
@@ -69,8 +69,8 @@
     .page-badge {
       display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
       padding: 5px 14px; border-radius: 99px;
-      border: 1px solid rgba(168,85,247,0.3); background: rgba(168,85,247,0.08);
-      font-size: 0.75rem; font-weight: 700; color: var(--purple);
+      border: 1px solid rgba(31,116,236,0.3); background: rgba(31,116,236,0.08);
+      font-size: 0.75rem; font-weight: 700; color: var(--blue-deep);
       letter-spacing: 0.1em; text-transform: uppercase;
     }
     h1 {
@@ -78,12 +78,12 @@
       letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px;
     }
     .gradient-text {
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .page-lead { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 12px; }
     .page-meta { font-size: 0.85rem; color: var(--text-muted); }
-    .page-meta span { color: var(--cyan); }
+    .page-meta span { color: var(--blue); }
 
     .section {
       margin-bottom: 16px; padding: 28px;
@@ -102,8 +102,8 @@
     }
     .h2-icon {
       width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(168,85,247,0.2));
-      border: 1px solid rgba(6,182,212,0.25);
+      background: linear-gradient(135deg, rgba(43,143,255,0.2), rgba(31,116,236,0.2));
+      border: 1px solid rgba(43,143,255,0.25);
       display: flex; align-items: center; justify-content: center;
     }
     p { font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 12px; }
@@ -116,10 +116,10 @@
     ul li::before {
       content: ''; position: absolute; left: 0; top: 14px;
       width: 6px; height: 6px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
     }
     strong { color: var(--text-primary); font-weight: 600; }
-    a { color: var(--cyan); text-decoration: none; }
+    a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
     .email-grid {
@@ -128,29 +128,29 @@
     }
     .email-card {
       padding: 14px 16px; border-radius: 10px;
-      background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.18);
+      background: rgba(43,143,255,0.05); border: 1px solid rgba(43,143,255,0.18);
       transition: border-color 0.2s, background 0.2s;
     }
-    .email-card:hover { border-color: rgba(6,182,212,0.4); background: rgba(6,182,212,0.08); }
+    .email-card:hover { border-color: rgba(43,143,255,0.4); background: rgba(43,143,255,0.08); }
     .email-card-label {
       font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
       letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
     }
     .email-card a {
-      font-size: 0.88rem; font-weight: 600; color: var(--cyan);
+      font-size: 0.88rem; font-weight: 600; color: var(--blue);
       white-space: nowrap;
     }
 
     .contact-box {
       margin-top: 12px; padding: 16px; border-radius: 10px;
-      background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.15);
+      background: rgba(43,143,255,0.05); border: 1px solid rgba(43,143,255,0.15);
     }
 
     .response-pill {
       display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
-      border-radius: 99px; background: rgba(168,85,247,0.1);
-      border: 1px solid rgba(168,85,247,0.25);
-      font-size: 0.75rem; font-weight: 700; color: var(--purple);
+      border-radius: 99px; background: rgba(31,116,236,0.1);
+      border: 1px solid rgba(31,116,236,0.25);
+      font-size: 0.75rem; font-weight: 700; color: var(--blue-deep);
       letter-spacing: 0.05em; margin-bottom: 8px;
     }
 
@@ -161,13 +161,13 @@
     }
     .footer-brand {
       font-size: 0.85rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
     .footer-links { display: flex; gap: 18px; align-items: center; }
     .footer-links a { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--cyan); }
+    .footer-links a:hover { color: var(--blue); }
   </style>
 </head>
 <body>
@@ -204,7 +204,7 @@
   <div class="section">
     <div class="section-num">01</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
       How to Reach Us
     </h2>
     <p>Pick the address that matches your topic so we can route your message to the right team. We read every email.</p>
@@ -227,7 +227,7 @@
   <div class="section">
     <div class="section-num">02</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
       Response Time
     </h2>
     <span class="response-pill">Typically within 48 hours</span>
@@ -237,7 +237,7 @@
   <div class="section">
     <div class="section-num">03</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       Account &amp; Sign-In
     </h2>
     <p>If you cannot sign in, try the following first:</p>
@@ -253,7 +253,7 @@
   <div class="section">
     <div class="section-num">04</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
       Audio &amp; Playback
     </h2>
     <p>Audio not playing or sounding off?</p>
@@ -269,7 +269,7 @@
   <div class="section">
     <div class="section-num">05</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
       Uploading Audio
     </h2>
     <p>Uploads have file-size and duration limits to keep things smooth:</p>
@@ -284,7 +284,7 @@
   <div class="section">
     <div class="section-num">06</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
       Notifications
     </h2>
     <p>Not getting notifications?</p>
@@ -298,7 +298,7 @@
   <div class="section">
     <div class="section-num">07</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
       Delete Your Account
     </h2>
     <p>You can request deletion of your AudioVibe account and all associated data at any time.</p>
@@ -308,7 +308,7 @@
   <div class="section">
     <div class="section-num">08</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></div>
       Report a Bug
     </h2>
     <p>When reporting a bug, please include:</p>
@@ -325,7 +325,7 @@
   <div class="section">
     <div class="section-num">09</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></div>
       Business &amp; Press
     </h2>
     <p>For partnerships, press inquiries, advertising or business development, please write to <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a> and we will direct your message to the right person.</p>
@@ -334,7 +334,7 @@
   <div class="section">
     <div class="section-num">10</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       Legal &amp; Privacy
     </h2>
     <p>For privacy questions, data requests, or to review how we handle your information, see our <a href="privacy.html">Privacy Policy</a>.</p>

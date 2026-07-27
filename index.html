@@ -16,10 +16,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cyan: #06b6d4;
-      --cyan-light: #22d3ee;
-      --purple: #a855f7;
-      --purple-dark: #9333ea;
+      --blue: #22d3ee;
+      --blue-sky: #22d3ee;
+      --blue-deep: #1f74ec;
+      --blue-darkest: #1554c0;
       --bg-darkest: #0a0a0a;
       --bg-dark: #111111;
       --bg-card: #161616;
@@ -50,9 +50,9 @@
       position: absolute; border-radius: 50%; filter: blur(100px);
       animation: drift 24s infinite ease-in-out;
     }
-    .orb-1 { width: 700px; height: 700px; background: var(--cyan); opacity: 0.06; top: -300px; left: -200px; animation-delay: 0s; }
-    .orb-2 { width: 600px; height: 600px; background: var(--purple); opacity: 0.07; bottom: -200px; right: -200px; animation-delay: -10s; }
-    .orb-3 { width: 400px; height: 400px; background: var(--cyan); opacity: 0.04; top: 40%; left: 40%; animation-delay: -5s; }
+    .orb-1 { width: 700px; height: 700px; background: var(--blue); opacity: 0.06; top: -300px; left: -200px; animation-delay: 0s; }
+    .orb-2 { width: 600px; height: 600px; background: var(--blue-deep); opacity: 0.07; bottom: -200px; right: -200px; animation-delay: -10s; }
+    .orb-3 { width: 400px; height: 400px; background: var(--blue); opacity: 0.04; top: 40%; left: 40%; animation-delay: -5s; }
     @keyframes drift {
       0%, 100% { transform: translate(0, 0); }
       33% { transform: translate(40px, -40px); }
@@ -72,7 +72,7 @@
     .nav-waveform { display: flex; align-items: center; gap: 3px; height: 26px; }
     .nav-bar {
       width: 3px; border-radius: 99px;
-      background: linear-gradient(to top, var(--cyan), var(--purple));
+      background: linear-gradient(to top, var(--blue), var(--blue-deep));
       animation: waveAnim 1.6s ease-in-out infinite;
     }
     .nav-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
@@ -86,9 +86,11 @@
     }
     .nav-brand {
       font-size: 1rem; font-weight: 800; letter-spacing: 0.02em;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    /* Wordmark: "Audio" stays solid white, "Vibe" shows the blue gradient */
+    .wm-solid { -webkit-text-fill-color: #fff; color: #fff; }
     .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
     .nav-links a {
       font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
@@ -97,9 +99,9 @@
     .nav-links a:hover { color: #fff; }
     .nav-cta {
       padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       color: #fff; text-decoration: none; transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 0 20px rgba(6,182,212,0.25);
+      box-shadow: 0 0 20px rgba(43,143,255,0.25);
     }
     .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
@@ -115,13 +117,13 @@
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 16px; border-radius: 99px; margin-bottom: 36px;
-      border: 1px solid rgba(6,182,212,0.25);
-      background: rgba(6,182,212,0.07);
-      font-size: 0.78rem; font-weight: 700; color: var(--cyan);
+      border: 1px solid rgba(43,143,255,0.25);
+      background: rgba(43,143,255,0.07);
+      font-size: 0.78rem; font-weight: 700; color: var(--blue);
       letter-spacing: 0.1em; text-transform: uppercase;
     }
     .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
       animation: pulse 2.2s infinite;
     }
     @keyframes pulse {
@@ -134,7 +136,7 @@
       margin-bottom: 28px;
     }
     .g {
-      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .hero-sub {
@@ -147,12 +149,12 @@
       display: inline-flex; align-items: center; gap: 10px;
       padding: 15px 30px; border-radius: 12px;
       font-size: 1rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       color: #fff; text-decoration: none;
-      box-shadow: 0 0 40px rgba(6,182,212,0.3);
+      box-shadow: 0 0 40px rgba(43,143,255,0.3);
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 48px rgba(168,85,247,0.4); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 48px rgba(31,116,236,0.4); }
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 10px;
       padding: 15px 30px; border-radius: 12px;
@@ -161,7 +163,7 @@
       border: 1px solid var(--border-light); text-decoration: none;
       transition: border-color 0.2s, color 0.2s, transform 0.2s;
     }
-    .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-3px); }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-3px); }
 
     /* ── Waveform visual ── */
     .hero-visual {
@@ -172,7 +174,7 @@
     }
     .hero-visual::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--cyan), var(--purple));
+      background: linear-gradient(to right, var(--blue), var(--blue-deep));
     }
     .visual-label {
       font-size: 0.75rem; color: var(--text-muted); font-weight: 600;
@@ -180,7 +182,7 @@
       display: flex; align-items: center; gap: 8px;
     }
     .playing-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
       animation: pulse 1.4s infinite;
     }
     .waveform-bars {
@@ -188,7 +190,7 @@
     }
     .wb {
       flex: 1; border-radius: 99px; min-width: 3px;
-      background: linear-gradient(to top, rgba(6,182,212,0.4), var(--purple));
+      background: linear-gradient(to top, rgba(43,143,255,0.4), var(--blue-deep));
       animation: waveAnim 1.6s ease-in-out infinite;
     }
     .wb:nth-child(1){height:35%;animation-delay:0s}
@@ -234,7 +236,7 @@
     .stat:last-child { border-right: none; }
     .stat-val {
       font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .stat-lbl { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
@@ -243,7 +245,7 @@
     section { position: relative; z-index: 1; padding: 100px 6%; }
     .section-tag {
       font-size: 0.72rem; font-weight: 800; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--cyan); margin-bottom: 14px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 14px;
     }
     .section-h {
       font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 900;
@@ -255,7 +257,7 @@
     }
     .divider {
       width: 40px; height: 3px; border-radius: 2px;
-      background: linear-gradient(to right, var(--cyan), var(--purple));
+      background: linear-gradient(to right, var(--blue), var(--blue-deep));
       margin: 20px 0;
     }
     .centered { text-align: center; }
@@ -276,15 +278,15 @@
     }
     .feature-card::after {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--cyan), var(--purple));
+      background: linear-gradient(to right, var(--blue), var(--blue-deep));
       opacity: 0; transition: opacity 0.25s;
     }
-    .feature-card:hover { border-color: rgba(6,182,212,0.25); transform: translateY(-4px); }
+    .feature-card:hover { border-color: rgba(43,143,255,0.25); transform: translateY(-4px); }
     .feature-card:hover::after { opacity: 1; }
     .feature-icon-wrap {
       width: 48px; height: 48px; border-radius: 13px; margin-bottom: 20px;
-      background: linear-gradient(135deg, rgba(6,182,212,0.12), rgba(168,85,247,0.12));
-      border: 1px solid rgba(6,182,212,0.2);
+      background: linear-gradient(135deg, rgba(43,143,255,0.12), rgba(31,116,236,0.12));
+      border: 1px solid rgba(43,143,255,0.2);
       display: flex; align-items: center; justify-content: center;
     }
     .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
@@ -298,10 +300,10 @@
     .step { text-align: center; }
     .step-num {
       width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 20px;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       display: flex; align-items: center; justify-content: center;
       font-size: 1.3rem; font-weight: 900; color: #fff;
-      box-shadow: 0 0 24px rgba(6,182,212,0.3);
+      box-shadow: 0 0 24px rgba(43,143,255,0.3);
     }
     .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
     .step p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; max-width: 220px; margin: 0 auto; }
@@ -315,11 +317,11 @@
     .share-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 20px; overflow: hidden;
-      box-shadow: 0 0 60px rgba(6,182,212,0.08), 0 0 60px rgba(168,85,247,0.06);
+      box-shadow: 0 0 60px rgba(43,143,255,0.08), 0 0 60px rgba(31,116,236,0.06);
     }
     .share-card-top {
       height: 180px;
-      background: linear-gradient(135deg, var(--cyan) 0%, #7c3aed 50%, var(--purple) 100%);
+      background: linear-gradient(135deg, var(--blue) 0%, #2b8fff 50%, var(--blue-deep) 100%);
       display: flex; align-items: center; justify-content: center; position: relative;
     }
     .share-waveform { display: flex; align-items: center; gap: 4px; height: 48px; }
@@ -341,7 +343,7 @@
       display: block; width: 100%; padding: 12px;
       border-radius: 10px; text-align: center; text-decoration: none;
       font-size: 0.875rem; font-weight: 700; color: #fff;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
     }
     .share-copy { display: flex; flex-direction: column; gap: 16px; }
     .share-copy h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; }
@@ -353,8 +355,8 @@
     }
     .sd-icon {
       width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(168,85,247,0.15));
-      border: 1px solid rgba(6,182,212,0.2);
+      background: linear-gradient(135deg, rgba(43,143,255,0.15), rgba(31,116,236,0.15));
+      border: 1px solid rgba(43,143,255,0.2);
       display: flex; align-items: center; justify-content: center;
     }
     .sd-text strong { display: block; font-size: 0.88rem; margin-bottom: 2px; }
@@ -363,24 +365,24 @@
     /* ── Download CTA ── */
     #download {
       text-align: center;
-      background: linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.03) 50%, transparent 100%);
+      background: linear-gradient(180deg, transparent 0%, rgba(43,143,255,0.03) 50%, transparent 100%);
     }
     .download-card {
       max-width: 600px; margin: 48px auto 0;
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 24px; padding: 56px 48px;
       position: relative; overflow: hidden;
-      box-shadow: 0 0 80px rgba(6,182,212,0.06);
+      box-shadow: 0 0 80px rgba(43,143,255,0.06);
     }
     .download-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--cyan), var(--purple));
+      background: linear-gradient(to right, var(--blue), var(--blue-deep));
     }
     .download-logo { display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 24px; }
     .dl-waveform { display: flex; align-items: center; gap: 4px; height: 40px; }
     .dlw {
       width: 5px; border-radius: 99px;
-      background: linear-gradient(to top, var(--cyan), var(--purple));
+      background: linear-gradient(to top, var(--blue), var(--blue-deep));
       animation: waveAnim 1.6s ease-in-out infinite;
     }
     .dlw:nth-child(1){height:40%;animation-delay:0s}
@@ -390,7 +392,7 @@
     .dlw:nth-child(5){height:40%;animation-delay:0.48s}
     .download-brand {
       font-size: 1.8rem; font-weight: 900;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .download-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
@@ -403,7 +405,7 @@
       color: var(--text-primary); text-decoration: none;
       transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
-    .store-btn:hover { border-color: var(--cyan); background: rgba(6,182,212,0.06); transform: translateY(-2px); }
+    .store-btn:hover { border-color: var(--blue); background: rgba(43,143,255,0.06); transform: translateY(-2px); }
     .store-btn-label { text-align: left; }
     .store-btn-sub { display: block; font-size: 0.7rem; color: var(--text-muted); }
     .store-btn-name { display: block; font-size: 0.95rem; font-weight: 700; }
@@ -422,19 +424,19 @@
     .footer-left { display: flex; flex-direction: column; gap: 6px; }
     .footer-brand {
       font-size: 0.9rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .footer-copy { font-size: 0.78rem; color: var(--text-muted); }
     .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
     .footer-links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--cyan); }
+    .footer-links a:hover { color: var(--blue); }
 
     /* ── Glow divider ── */
     .glow-line {
       position: relative; z-index: 1;
       height: 1px; max-width: 180px; margin: 0 auto;
-      background: linear-gradient(to right, transparent, var(--cyan), var(--purple), transparent);
+      background: linear-gradient(to right, transparent, var(--blue), var(--blue-deep), transparent);
       opacity: 0.4;
     }
 
@@ -469,7 +471,7 @@
       <div class="nav-bar"></div>
       <div class="nav-bar"></div>
     </div>
-    <span class="nav-brand">AudioVibe</span>
+    <span class="nav-brand"><span class="wm-solid">Audio</span>Vibe</span>
   </a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
@@ -554,42 +556,42 @@
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
       <h3>Upload Any Audio</h3>
       <p>MP3, WAV, M4A, FLAC. Upload any format. Add cover art, title, and description. Your track is live in seconds.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       </div>
       <h3>Build Your Following</h3>
       <p>Follow creators, get notified when they drop new audio, and grow your own audience organically through great content.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
       <h3>Discover New Sound</h3>
       <p>A personalised For You feed and trending discovery tab surface audio you'll love, from genres you follow to new ones you'll discover.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
       <h3>Direct Messaging</h3>
       <p>Connect directly with creators and fans. Send voice messages, text, and share audio tracks in conversation.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
       </div>
       <h3>Series & Episodes</h3>
       <p>Organise your content into series. Perfect for podcasts, albums, or audio diaries. Listeners follow the series, not just you.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       </div>
       <h3>Creator Profile</h3>
       <p>A beautiful profile page, shareable link, and full audio portfolio. Your own page on the web at audiovibe.co/@you.</p>
@@ -650,7 +652,7 @@
       <p>When you share a track link, it unfurls into a rich preview card on any social platform, with your cover art, title, and a direct link that opens the app instantly.</p>
       <div class="share-detail">
         <div class="sd-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         </div>
         <div class="sd-text">
           <strong>Your permanent URL</strong>
@@ -659,7 +661,7 @@
       </div>
       <div class="share-detail">
         <div class="sd-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </div>
         <div class="sd-text">
           <strong>Smart deep link</strong>
@@ -683,13 +685,13 @@
         <div class="dlw"></div><div class="dlw"></div><div class="dlw"></div>
         <div class="dlw"></div><div class="dlw"></div>
       </div>
-      <div class="download-brand">AudioVibe</div>
+      <div class="download-brand"><span class="wm-solid">Audio</span>Vibe</div>
     </div>
     <h2>Free to download.<br/>Free to create.</h2>
     <p>Join creators sharing their sound on AudioVibe. Upload, discover, and connect, all in one app.</p>
     <div class="store-buttons">
       <a href="https://play.google.com/store/apps/details?id=co.audiovibe" class="store-btn" target="_blank" rel="noopener">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
         <div class="store-btn-label">
           <span class="store-btn-sub">Get it on</span>
           <span class="store-btn-name">Google Play</span>
@@ -713,7 +715,7 @@
 <!-- Footer -->
 <footer>
   <div class="footer-left">
-    <div class="footer-brand">AudioVibe</div>
+    <div class="footer-brand"><span class="wm-solid">Audio</span>Vibe</div>
     <div class="footer-copy">© 2026 Alpha Tech Labs Ltd. Registered in England &amp; Wales.</div>
   </div>
   <div class="footer-links">
