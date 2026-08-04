@@ -146,6 +146,28 @@
     .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
     .footer-home { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .footer-home:hover { color: var(--blue); }
+
+    .table-scroll { overflow-x: auto; margin: 12px 0; -webkit-overflow-scrolling: touch; }
+    table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.86rem; }
+    th, td {
+      text-align: left; padding: 9px 12px; vertical-align: top;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--text-primary); font-weight: 700; font-size: 0.78rem;
+         text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: var(--text-secondary); }
+    tr:last-child td { border-bottom: none; }
+    .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .toc a {
+      font-size: 0.78rem; font-weight: 600; padding: 5px 12px; border-radius: 99px;
+      background: rgba(43,143,255,0.06); border: 1px solid rgba(43,143,255,0.18);
+    }
+    .toc a:hover { background: rgba(43,143,255,0.15); text-decoration: none; }
+    .callout {
+      margin: 14px 0; padding: 14px 16px; border-radius: 10px;
+      background: rgba(43,143,255,0.05); border-left: 3px solid var(--blue);
+    }
+    .callout p:last-child { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -174,117 +196,279 @@
     <div class="page-badge">Legal Document</div>
     <h1><span class="gradient-text">Privacy Policy</span></h1>
     <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:12px;">
-      This privacy policy applies to the <strong style="color:var(--text-primary)">AudioVibe</strong> app for mobile devices, developed by Alpha Tech Labs Ltd as a free service.
+      How <strong style="color:var(--text-primary)">Alpha Tech Labs Ltd</strong> collects and uses personal data when you use AudioVibe. This policy is written to meet the UK GDPR and the Data Protection Act 2018.
     </p>
-    <div class="page-meta">Effective: <span>18 April 2026</span> &nbsp;&middot;&nbsp; App: <span>AudioVibe</span> &nbsp;&middot;&nbsp; Developer: <span>Alpha Tech Labs Ltd</span></div>
+    <div class="page-meta">Effective: <span>4 August 2026</span> &nbsp;&middot;&nbsp; Service: <span>AudioVibe</span> &nbsp;&middot;&nbsp; Controller: <span>Alpha Tech Labs Ltd</span></div>
   </div>
 
-  <div class="section">
+  <div class="toc">
+    <a href="#who-we-are">Who we are</a>
+    <a href="#what-we-collect">What we collect</a>
+    <a href="#why">Why, and our legal basis</a>
+    <a href="#recommendations">Recommendations and profiling</a>
+    <a href="#sharing">Who we share it with</a>
+    <a href="#transfers">International transfers</a>
+    <a href="#retention">How long we keep it</a>
+    <a href="#rights">Your rights</a>
+    <a href="#deletion">Deleting your account</a>
+    <a href="#children">Children and young people</a>
+    <a href="#security">Security</a>
+    <a href="#changes">Changes</a>
+    <a href="#contact">Contact and complaints</a>
+  </div>
+
+  <div class="section" id="who-we-are">
     <div class="section-num">01</div>
     <h2>
       <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      Information We Collect
+      Who we are
     </h2>
-    <p>The Application collects information you provide when registering and using the app. Registration is not mandatory, but some features require an account.</p>
-    <p>The Application allows you to upload audio recordings, which are stored on our servers and may be visible to other users based on your privacy settings.</p>
-    <p>We also collect certain information automatically: device type, unique device ID, IP address, operating system, browser type, and usage data.</p>
+    <p>AudioVibe is an audio-first social platform operated by <strong style="color:var(--text-primary)">Alpha Tech Labs Ltd</strong>, a company registered in England and Wales, company number <strong style="color:var(--text-primary)">17015966</strong>.</p>
+    <p>Alpha Tech Labs Ltd is the data controller for the personal data described in this policy. That means we decide what data is collected and why, and we are responsible for looking after it.</p>
+    <p>This policy covers the AudioVibe mobile apps for Android and iOS, the audiovibe.co website, and the public profile and share pages we serve.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="what-we-collect">
     <div class="section-num">02</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-      How We Use Your Information
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      What we collect
     </h2>
-    <p>We use collected information to operate and improve the Application, provide support, send important notices, and deliver relevant content and features.</p>
-    <p>The Application may use automated systems to recommend audio content based on your listening activity, solely to improve your in-app experience.</p>
+    <p>Everything below is either given to us by you, created by you using the app, or generated automatically as the app runs.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Examples</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Account details</td><td>Name, username, email address, password (stored hashed, never in plain text), date of birth, profile photo, bio</td><td>You</td></tr>
+          <tr><td>Sign-in identifiers</td><td>Google account identifier and verified email if you use Google sign in</td><td>Google</td></tr>
+          <tr><td>Audio you create</td><td>Audio posts, series episodes, echoes, voice messages, and their titles, descriptions, tags and cover images</td><td>You</td></tr>
+          <tr><td>Other content you create</td><td>Comments, playlists, saved folders, in-audio bookmarks, profile text</td><td>You</td></tr>
+          <tr><td>Messages</td><td>Direct messages and group chat messages, including voice notes, and delivery and read receipts</td><td>You</td></tr>
+          <tr><td>Social graph</td><td>Who you follow, who follows you, follow requests, message requests, blocks</td><td>You</td></tr>
+          <tr><td>Listening and interaction activity</td><td>What you played and for how long, plays, likes, saves, shares, skips, what was shown to you in a feed, search queries, screens viewed</td><td>Automatic</td></tr>
+          <tr><td>Session and presence data</td><td>When the app is open, foregrounded or playing audio, session length, time on app</td><td>Automatic</td></tr>
+          <tr><td>Device and technical data</td><td>Device model, operating system, app version, IP address, push notification token, approximate country derived from your IP</td><td>Automatic</td></tr>
+          <tr><td>Diagnostics</td><td>Crash reports, error logs and the device state at the time of a crash</td><td>Automatic</td></tr>
+          <tr><td>Moderation records</td><td>Reports you make or that are made about you, and the outcome</td><td>You and others</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p><strong style="color:var(--text-primary)">We do not collect</strong> precise location, contacts, health or fitness data, payment or financial information, or an advertising identifier. AudioVibe carries no advertising and no advertising SDKs.</p>
+    </div>
+
+    <p>Microphone, camera and photo library access are requested only at the moment you use a feature that needs them, and you can decline. Declining the microphone means you cannot record audio; the rest of the app still works.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="why">
     <div class="section-num">03</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
-      Location Data
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      Why we use it, and our legal basis
     </h2>
-    <p>This Application does not gather precise real-time location information from your mobile device.</p>
+    <p>Under the UK GDPR we must have a lawful basis for every use of your personal data. Ours are set out below.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>What we do</th><th>Data used</th><th>Legal basis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Create and run your account, host and stream your content, deliver your messages</td><td>Account details, content, messages, social graph</td><td>Performance of a contract (our Terms of Service)</td></tr>
+          <tr><td>Recommend audio and creators in For You, Discover and search</td><td>Listening and interaction activity, follows</td><td>Legitimate interests: making a content service usable at scale. See section 4.</td></tr>
+          <tr><td>Keep the service safe: moderation, spam and abuse prevention, rate limiting, fraud and security investigation</td><td>Content, reports, device and technical data, session data</td><td>Legitimate interests in protecting our users and our service, and legal obligation under the Online Safety Act 2023</td></tr>
+          <tr><td>Age gating for 18+ content</td><td>Date of birth, your content setting</td><td>Legal obligation, and legitimate interests in protecting young users</td></tr>
+          <tr><td>Fix crashes and improve reliability and performance</td><td>Diagnostics, device data, session data</td><td>Legitimate interests: keeping the app working</td></tr>
+          <tr><td>Send push notifications about activity on your account</td><td>Push token, account details</td><td>Consent, given at the operating system prompt and withdrawable at any time in your device settings</td></tr>
+          <tr><td>Respond to your questions, rights requests and complaints</td><td>Whatever is relevant to your request</td><td>Legal obligation, and legitimate interests in supporting our users</td></tr>
+          <tr><td>Comply with law, respond to lawful requests, establish or defend legal claims</td><td>As required</td><td>Legal obligation, and legitimate interests</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Where we rely on legitimate interests we have considered whether our interest is outweighed by your rights, and we have limited what we collect accordingly. You can object to processing based on legitimate interests: see section 8.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="recommendations">
     <div class="section-num">04</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg></div>
-      Third-Party Services
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg></div>
+      Recommendations and profiling
     </h2>
-    <p>Only aggregated, anonymised data is periodically transmitted to external services to help improve the Application.</p>
-    <p>The Application uses the following third-party service which has its own privacy policy:</p>
-    <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer" class="third-party-link">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Google Analytics for Firebase - Privacy Policy
-    </a>
-    <p style="margin-top:16px">We may disclose your information:</p>
+    <p>AudioVibe builds a picture of what you like from what you listen to, finish, skip, like, save and follow, and uses it to order the For You feed, the Discover rails and creator suggestions. This is profiling as the UK GDPR defines it, so we want to be plain about it.</p>
     <ul>
-      <li>As required by law or in response to legal process</li>
-      <li>To protect rights, safety, or investigate fraud</li>
-      <li>With trusted service providers bound by this privacy statement</li>
+      <li>It affects what content is shown to you and in what order. It does not affect your access to the service, your account standing, or anything with a legal or similarly significant effect on you.</li>
+      <li>There is no automated decision-making under Article 22. Moderation decisions that restrict an account are made or reviewed by a person.</li>
+      <li>We do not use your data to build an advertising profile, and we do not sell it.</li>
+      <li>You can object to profiling for recommendations by contacting us. The feed then falls back to non-personalised ordering.</li>
     </ul>
   </div>
 
-  <div class="section">
+  <div class="section" id="sharing">
     <div class="section-num">05</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg></div>
-      Opt-Out &amp; Account Deletion
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg></div>
+      Who we share it with
     </h2>
-    <p>You can stop all data collection by uninstalling the Application via your device or the Google Play Store.</p>
-    <p>To request deletion of your account and associated data, contact us at the email address below.</p>
+    <p><strong style="color:var(--text-primary)">We do not sell your personal data, and we do not share it for advertising.</strong></p>
+    <p>Other users see what you choose to make visible: your public profile, the content you post publicly, and the messages you send them. Content on a private account is limited to approved followers. Public profile and share pages can be viewed by anyone with the link.</p>
+    <p>We use the following service providers, who process data on our instructions:</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>What they do for us</th><th>Where</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Railway Corp.</td><td>Application hosting and the PostgreSQL database</td><td>United States</td></tr>
+          <tr><td>Cloudflare, Inc.</td><td>R2 object storage for audio, images and voice notes, and network delivery</td><td>Global network</td></tr>
+          <tr><td>Google LLC (Firebase Cloud Messaging)</td><td>Delivering push notifications</td><td>United States</td></tr>
+          <tr><td>Google LLC (Firebase Crashlytics)</td><td>Crash and error reporting</td><td>United States</td></tr>
+          <tr><td>Google LLC (Google Sign-In)</td><td>Optional sign-in method</td><td>United States</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>We may also disclose personal data where we are required to by law, in response to a valid request from a law enforcement or regulatory body, or where necessary to establish, exercise or defend legal claims, or to protect the safety of our users or the public.</p>
+    <p>If Alpha Tech Labs Ltd is ever involved in a merger, acquisition or sale of assets, we will tell you before your personal data is transferred and becomes subject to a different privacy policy.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="transfers">
     <div class="section-num">06</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-      Data Retention
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      International transfers
     </h2>
-    <p>We retain user-provided data for as long as you use the Application and for a reasonable time thereafter. Automatically collected information is retained for up to 24 months.</p>
+    <p>Our hosting and several of our providers are based in the United States, so your personal data is transferred outside the United Kingdom.</p>
+    <p>Where we transfer personal data out of the UK we rely on the UK International Data Transfer Addendum to the EU Standard Contractual Clauses, or the UK International Data Transfer Agreement, together with the technical measures described in section 11. You can ask us for a copy of the safeguards we rely on using the contact details in section 13.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="retention">
     <div class="section-num">07</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-      Security
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      How long we keep it
     </h2>
-    <p>We implement physical, electronic, and procedural safeguards including JWT-based authentication, rate limiting, encrypted connections, and certificate pinning. No system can guarantee complete protection, but we take every reasonable precaution.</p>
+    <p>We keep personal data only as long as we need it for the purpose we collected it for.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Data</th><th>Kept for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Account details and profile</td><td>Until you delete your account, then removed</td></tr>
+          <tr><td>Audio, series, playlists, comments and other content</td><td>Until you delete the item or your account, then removed from our servers and our object storage</td></tr>
+          <tr><td>Messages</td><td>Until deleted by a participant, or until account deletion. A message already delivered to someone else remains in their copy of the conversation.</td></tr>
+          <tr><td>Listening and interaction activity</td><td>Up to 24 months, then deleted or aggregated so it no longer identifies you</td></tr>
+          <tr><td>Session and presence data</td><td>Up to 24 months</td></tr>
+          <tr><td>Server and security logs</td><td>Up to 90 days</td></tr>
+          <tr><td>Crash reports</td><td>Up to 90 days, per Firebase Crashlytics retention</td></tr>
+          <tr><td>Moderation reports and enforcement records</td><td>Up to 24 months after the case is closed, so we can identify repeat behaviour and meet our duties under the Online Safety Act 2023</td></tr>
+          <tr><td>Records we must keep by law</td><td>For the period the law requires</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="section">
+  <div class="section" id="rights">
     <div class="section-num">08</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-      Children's Privacy
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      Your rights
     </h2>
-    <p>AudioVibe is not directed at children under 13. We do not knowingly collect personal information from children under 13. If discovered, such data will be deleted immediately. Parents or guardians should contact us if concerned.</p>
+    <p>Under the UK GDPR you have the following rights. They are free to exercise, and we will respond within one month.</p>
+    <ul>
+      <li><strong style="color:var(--text-primary)">Access.</strong> Ask for a copy of the personal data we hold about you.</li>
+      <li><strong style="color:var(--text-primary)">Rectification.</strong> Have inaccurate data corrected. Most of it you can edit yourself in the app.</li>
+      <li><strong style="color:var(--text-primary)">Erasure.</strong> Ask us to delete your data. See section 9.</li>
+      <li><strong style="color:var(--text-primary)">Restriction.</strong> Ask us to pause processing while a dispute is resolved.</li>
+      <li><strong style="color:var(--text-primary)">Portability.</strong> Receive the data you gave us in a machine-readable format, or have it sent to another provider where technically feasible.</li>
+      <li><strong style="color:var(--text-primary)">Objection.</strong> Object to processing based on legitimate interests, including profiling for recommendations.</li>
+      <li><strong style="color:var(--text-primary)">Withdraw consent.</strong> Where we rely on consent, such as push notifications, you can withdraw it at any time without affecting what we did before.</li>
+      <li><strong style="color:var(--text-primary)">Complain.</strong> Raise a concern with the Information Commissioner's Office. See section 13.</li>
+    </ul>
+    <p>To exercise any of these, email us at <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a>. We may ask you to confirm your identity before we act, so that we do not disclose your data to someone else.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="deletion">
     <div class="section-num">09</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
-      Changes to This Policy
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+      Deleting your account and your data
     </h2>
-    <p>This Privacy Policy may be updated from time to time. We will notify you by updating this page. Continued use of the Application constitutes acceptance of the revised policy.</p>
+    <p>You can delete your account at any time from inside the app: <strong style="color:var(--text-primary)">Settings, then Delete account</strong>. Deletion removes your profile, your audio, series, playlists, stories, comments, likes, follows, listening history and the underlying files in our object storage.</p>
+    <p>If you cannot or do not want to install the app, you can request deletion instead. Full details of what is removed, what is kept and how to ask are on our <a href="delete-account.html">account deletion page</a>.</p>
+    <p>Uninstalling the app stops further collection from your device, but it does not delete the account. Use one of the two routes above for that.</p>
   </div>
 
-  <div class="section">
+  <div class="section" id="children">
     <div class="section-num">10</div>
     <h2>
-      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      Contact Us
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      Children and young people
     </h2>
-    <p>For any questions about this Privacy Policy or our data practices, please contact:</p>
+    <p>You must be at least <strong style="color:var(--text-primary)">13</strong> to use AudioVibe. We do not knowingly collect personal data from anyone under 13. If we learn that we have, we delete the account and the data.</p>
+    <p>We know that some of our users are between 13 and 17, and we design for that. We follow the Information Commissioner's Office Age Appropriate Design Code, which means among other things:</p>
+    <ul>
+      <li>Content rated 18+ is hidden by default, and can only be turned on by an account whose declared date of birth is 18 or over.</li>
+      <li>We collect the minimum data we need, and we do not use it for advertising.</li>
+      <li>We do not use nudge techniques to push you toward weaker privacy settings.</li>
+      <li>We do not collect precise location.</li>
+    </ul>
+    <p>Age is currently established from the date of birth you declare when you sign up. If you are a parent or guardian with a concern about a young person's account, contact us and we will help.</p>
+  </div>
+
+  <div class="section" id="security">
+    <div class="section-num">11</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      How we protect it
+    </h2>
+    <ul>
+      <li>All traffic between the app and our servers is encrypted in transit using HTTPS, with HTTP Strict Transport Security enforced.</li>
+      <li>Passwords are stored as salted hashes. We never store or transmit them in plain text, and we cannot read them.</li>
+      <li>Sign-in tokens are held in the operating system keychain or keystore on your device, not in ordinary app storage, and are excluded from device backups.</li>
+      <li>Access tokens are short-lived. Refresh tokens rotate on every use, and reuse of an old token revokes the whole session family.</li>
+      <li>Data at rest is encrypted by our hosting and storage providers.</li>
+      <li>Rate limiting, request validation and abuse detection protect the service from automated attack.</li>
+      <li>Access to production data inside Alpha Tech Labs Ltd is limited to those who need it, and administrative actions on user data are recorded in an audit log.</li>
+    </ul>
+    <p>No online service can promise perfect security. If we ever suffer a personal data breach that is likely to result in a risk to your rights and freedoms, we will report it to the Information Commissioner's Office within 72 hours and tell you where the law requires it.</p>
+  </div>
+
+  <div class="section" id="changes">
+    <div class="section-num">12</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      Changes to this policy
+    </h2>
+    <p>We may update this policy as the service changes. The effective date at the top always tells you which version you are reading. If we make a change that materially affects how we use your personal data, we will give you reasonable notice in the app before it takes effect.</p>
+  </div>
+
+  <div class="section" id="contact">
+    <div class="section-num">13</div>
+    <h2>
+      <div class="h2-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      Contact us, and how to complain
+    </h2>
+    <p>For anything about this policy, your data, or to exercise a right:</p>
     <div class="contact-box">
       <p style="margin:0"><strong style="color:var(--text-primary)">Alpha Tech Labs Ltd</strong><br/>
-      <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a></p>
+      Registered in England and Wales, company number 17015966<br/>
+      Email: <a href="mailto:generalinquiries@audiovibe.co">generalinquiries@audiovibe.co</a><br/>
+      Registered office address available on request.</p>
+    </div>
+    <p style="margin-top:16px">If you are unhappy with how we have handled your personal data, please tell us first so we can put it right. You also have the right to complain to the UK supervisory authority:</p>
+    <div class="contact-box">
+      <p style="margin:0"><strong style="color:var(--text-primary)">Information Commissioner's Office</strong><br/>
+      Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF<br/>
+      Helpline: 0303 123 1113<br/>
+      <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener noreferrer">ico.org.uk/make-a-complaint</a></p>
     </div>
   </div>
 </div>
@@ -292,11 +476,13 @@
 <footer>
   <div>
     <div class="footer-brand">Alpha Tech Labs Ltd</div>
-    <div class="footer-copy">© 2026 Alpha Tech Labs Ltd. Registered in England &amp; Wales.</div>
+    <div class="footer-copy">&copy; 2026 Alpha Tech Labs Ltd. Registered in England &amp; Wales, company number 17015966.</div>
   </div>
   <div style="display:flex; gap:18px; align-items:center;">
+    <a href="terms.html" class="footer-home">Terms</a>
+    <a href="delete-account.html" class="footer-home">Delete account</a>
     <a href="support.html" class="footer-home">Support</a>
-    <a href="https://audiovibe.co" class="footer-home">← Back to Home</a>
+    <a href="https://audiovibe.co" class="footer-home">Back to Home</a>
   </div>
 </footer>
 
