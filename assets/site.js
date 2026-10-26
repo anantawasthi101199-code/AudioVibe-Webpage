@@ -2,6 +2,26 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, k) => a + (b - a) * k;
 const mobile = () => innerWidth < 860;
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+/* ---------- Smooth scrolling ---------- */
+let lenis;
+if (!reduced) {
+  import('lenis').then(({ default: Lenis }) => {
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on('scroll', onScroll);
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+  }).catch(() => {});
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const el = document.querySelector(a.getAttribute('href'));
+  if (!el) return;
+  e.preventDefault();
+  if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.4 });
+  else el.scrollIntoView();
+});
 
 /* ---------- Nav ---------- */
 const nav = document.getElementById('nav');
@@ -13,35 +33,85 @@ menuBtn.addEventListener('click', () => {
 });
 links.addEventListener('click', e => { if (e.target.closest('a')) links.classList.remove('open'); });
 
-/* ---------- Sample audio + analyser ---------- */
+/* ---------- Shorts player: hero card + dock share one <audio> ---------- */
+// Real shorts from production, copied from api.audiovibe.co/preview/<id>.mp3.
+const SHORTS = [
+  { id: '62a879cd-305a-4a0f-ba60-6b4409218fcb', file: 'microwave', title: 'The Microwave Oven: The Melted Chocolate Bar', chan: 'Eureka Tales', handle: 'eurekatales' },
+  { id: '7e597585-66ae-4a0f-8e03-d0f771a6edf7', file: 'bad-comment', title: 'Why You Remember the One Bad Comment', chan: 'Psyche Session', handle: 'psychesession' },
+  { id: 'ad2ea80a-3221-4617-be29-d62ddffc6af6', file: 'uber', title: 'Uber: The Taxi Company With No Taxis', chan: 'Business Decoded', handle: 'businessdecoded' },
+  { id: '1bb105de-2d55-44d8-9001-5f42f7a6bec1', file: 'maui', title: 'Maui Snares the Sun at Haleakala', chan: 'Mythic Archives', handle: 'mythicarchives' },
+];
 const audio = document.getElementById('sample');
-const sampleBtns = document.querySelectorAll('.sample-btn');
-const note = document.querySelector('.sample-note');
+const players = [document.getElementById('np'), document.getElementById('dock')];
+const parts = name => players.flatMap(p => [...p.querySelectorAll(`[data-np="${name}"]`)]);
+const dock = document.getElementById('dock');
 const level = { amp: 0, low: 0, high: 0 };
-let analyser, bins;
+let analyser, bins, track = 0, started = false, dockDismissed = false, heroVisible = true;
 
-function setPlaying(on) {
-  sampleBtns.forEach(b => {
-    b.setAttribute('aria-pressed', on);
-    b.querySelector('span').textContent = on ? 'Pause sample' : 'Hear a sample';
-  });
-  note.textContent = on ? "Alice's Adventures in Wonderland, chapter one, read by a LibriVox volunteer. Public domain." : '';
+function load(i, play) {
+  track = (i + SHORTS.length) % SHORTS.length;
+  const s = SHORTS[track];
+  audio.src = `assets/shorts/${s.file}.mp3`;
+  parts('cover').forEach(el => { el.src = `assets/shorts/${s.file}.webp`; });
+  parts('title').forEach(el => { el.textContent = s.title; });
+  parts('chan').forEach(el => { el.textContent = s.chan; });
+  parts('link').forEach(el => { el.href = `https://api.audiovibe.co/@${s.handle}/audio/${s.id}`; });
+  if (play) start();
 }
-sampleBtns.forEach(b => b.addEventListener('click', async () => {
-  if (!analyser) {
-    try {
-      const ctx = new AudioContext();
-      analyser = ctx.createAnalyser();
-      analyser.fftSize = 256;
-      analyser.smoothingTimeConstant = 0.75;
-      bins = new Uint8Array(analyser.frequencyBinCount);
-      ctx.createMediaElementSource(audio).connect(analyser).connect(ctx.destination);
-    } catch { /* plays without the sphere reacting */ }
-  }
-  if (audio.paused) { await audio.play(); setPlaying(true); } else { audio.pause(); setPlaying(false); }
-}));
-audio.addEventListener('ended', () => setPlaying(false));
+function ensureAnalyser() {
+  if (analyser) return;
+  try {
+    const ctx = new AudioContext();
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.75;
+    bins = new Uint8Array(analyser.frequencyBinCount);
+    ctx.createMediaElementSource(audio).connect(analyser).connect(ctx.destination);
+  } catch { /* plays without the visuals reacting */ }
+}
+async function start() {
+  ensureAnalyser();
+  started = true; dockDismissed = false;
+  try { await audio.play(); } catch { /* blocked autoplay: the button stays on play */ }
+}
+function sync() {
+  const on = !audio.paused;
+  players.forEach(p => p.classList.toggle('playing', on));
+  parts('toggle').forEach(b => b.setAttribute('aria-label', on ? 'Pause' : 'Play'));
+  updateDock();
+}
+function updateDock() {
+  const show = started && !dockDismissed && !heroVisible;
+  dock.classList.toggle('show', show);
+  document.body.classList.toggle('docked', show);
+}
+parts('toggle').forEach(b => b.addEventListener('click', () => (audio.paused ? start() : audio.pause())));
+parts('next').forEach(b => b.addEventListener('click', () => load(track + 1, true)));
+document.getElementById('dock-close').addEventListener('click', () => { audio.pause(); dockDismissed = true; updateDock(); });
+audio.addEventListener('play', sync);
+audio.addEventListener('pause', sync);
+audio.addEventListener('ended', () => load(track + 1, true)); // like the feed: the next one starts by itself
+audio.addEventListener('loadedmetadata', () => parts('dur').forEach(el => { el.textContent = fmt(audio.duration); }));
+audio.addEventListener('timeupdate', () => {
+  const p = audio.duration ? audio.currentTime / audio.duration : 0;
+  parts('fill').forEach(el => { el.style.width = `${p * 100}%`; });
+  parts('cur').forEach(el => { el.textContent = fmt(audio.currentTime); });
+  parts('seek').forEach(el => el.setAttribute('aria-valuenow', Math.round(p * 100)));
+});
+parts('seek').forEach(el => {
+  el.addEventListener('click', e => {
+    const r = el.getBoundingClientRect();
+    if (audio.duration) audio.currentTime = clamp((e.clientX - r.left) / r.width) * audio.duration;
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') audio.currentTime += 10;
+    if (e.key === 'ArrowLeft') audio.currentTime -= 10;
+  });
+});
+load(0, false);
 
+const barsEl = document.getElementById('bars');
+const barSpans = Array.from({ length: 18 }, () => barsEl.appendChild(document.createElement('span')));
 function readLevel() {
   let amp = 0, low = 0, high = 0;
   if (analyser && !audio.paused) {
@@ -50,36 +120,17 @@ function readLevel() {
     for (let i = 1; i < 8; i++) low += bins[i];
     for (let i = 16; i < 56; i++) high += bins[i];
     amp /= 64 * 255; low /= 7 * 255; high /= 40 * 255;
+    if (dock.classList.contains('show')) {
+      barSpans.forEach((s, i) => { s.style.transform = `scaleY(${(0.15 + (bins[2 + i * 3] / 255) * 0.85).toFixed(2)})`; });
+    }
   }
   level.amp = lerp(level.amp, amp, 0.25);
   level.low = lerp(level.low, low, 0.25);
   level.high = lerp(level.high, high, 0.25);
 }
+(function levelLoop() { readLevel(); requestAnimationFrame(levelLoop); })();
 
-/* ---------- Where the sphere sits for each section ---------- */
-// x, y are fractions of the half-viewport; s is scale; o is opacity.
-const POSE = {
-  hero:      { x: 0.48, y: 0.16, s: 1.25, o: 1 },
-  day:       { x: 0.55, y: -0.55, s: 0.6, o: 0.18 },
-  tour:      { x: 0.5, y: 0, s: 1.05, o: 0.5 },
-  originals: { x: 0, y: 0.05, s: 1.7, o: 0.2 },
-  make:      { x: -0.55, y: 0, s: 0.8, o: 0.3 },
-  download:  { x: 0, y: 0, s: 1.3, o: 0.7 },
-};
-const POSE_MOBILE = {
-  hero: { x: 0, y: 0.42, s: 0.85, o: 1 },
-  tour: { x: 0, y: 0.35, s: 0.75, o: 0.35 },
-  make: { x: 0, y: 0, s: 0.8, o: 0.2 },
-};
-const sections = [...document.querySelectorAll('[data-voice]')];
-function currentPose() {
-  const mid = innerHeight / 2;
-  const sec = sections.find(s => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; }) || sections[0];
-  const key = sec.dataset.voice;
-  return (mobile() && POSE_MOBILE[key]) || POSE[key];
-}
-
-/* ---------- The voice sphere ---------- */
+/* ---------- The voice sphere (hero only) ---------- */
 const NOISE = `
 vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
 vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
@@ -100,13 +151,14 @@ float snoise(vec3 v){
   vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;
   return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}`;
 
+const hero = document.querySelector('.hero');
 async function startVoice() {
   const canvas = document.getElementById('voice');
-  let THREE;
-  try { THREE = await import('three'); } catch { document.documentElement.classList.add('no-webgl'); return; }
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true }); }
-  catch { document.documentElement.classList.add('no-webgl'); return; }
+  let THREE, renderer;
+  try {
+    THREE = await import('three');
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
+  } catch { document.documentElement.classList.add('no-webgl'); return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
@@ -116,7 +168,7 @@ async function startVoice() {
   scene.add(group);
 
   // Points spread evenly over a sphere (Fibonacci lattice).
-  const N = innerWidth < 860 ? 7000 : 14000;
+  const N = mobile() ? 7000 : 14000;
   const pos = new Float32Array(N * 3), rnd = new Float32Array(N);
   const golden = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < N; i++) {
@@ -130,10 +182,10 @@ async function startVoice() {
 
   const uniforms = {
     uTime: { value: 0 }, uAmp: { value: 0 }, uLow: { value: 0 }, uHigh: { value: 0 },
-    uPx: { value: renderer.getPixelRatio() }, uOpacity: { value: 1 },
+    uPx: { value: renderer.getPixelRatio() }, uOpacity: { value: 0 },
     uA: { value: new THREE.Color('#22d3ee') }, uB: { value: new THREE.Color('#1f74ec') },
   };
-  const points = new THREE.Points(geo, new THREE.ShaderMaterial({
+  group.add(new THREE.Points(geo, new THREE.ShaderMaterial({
     uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: `${NOISE}
       uniform float uTime, uAmp, uLow, uHigh, uPx;
@@ -163,91 +215,93 @@ async function startVoice() {
         float a = smoothstep(.5, .1, r) * (.22 + .78 * smoothstep(-.6, 1., vFront));
         gl_FragColor = vec4(c * 1.15, a * uOpacity);
       }`,
-  }));
-  group.add(points);
+  })));
 
-  // Soft halo behind the sphere.
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.ShaderMaterial({
     uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
     fragmentShader: `uniform vec3 uB; uniform float uOpacity, uAmp; varying vec2 vUv;
       void main(){ float d = length(vUv - .5); gl_FragColor = vec4(uB, smoothstep(.5, 0., d) * (.28 + uAmp * .4) * uOpacity); }`,
   }));
-  halo.position.z = -1.2;
   scene.add(halo);
 
-  function resize() {
-    renderer.setSize(innerWidth, innerHeight, false);
-    camera.aspect = innerWidth / innerHeight;
+  function place() {
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    const halfH = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+    const halfW = halfH * camera.aspect;
+    // Desktop: upper right, clear of the headline. Phone: above the headline.
+    const [x, y, s] = mobile() ? [0, halfH * 0.55, 0.62] : [halfW * 0.46, halfH * 0.2, 1.2];
+    group.position.set(x, y, 0); halo.position.set(x, y, -1.2);
+    group.userData.s = s;
   }
-  addEventListener('resize', resize);
-  resize();
+  addEventListener('resize', place);
+  place();
 
   const mouse = { x: 0, y: 0 };
   addEventListener('pointermove', e => { mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5; });
 
-  const state = { x: 0, y: 0, s: 1, o: 0 };
   const clock = new THREE.Clock();
-  renderer.setAnimationLoop(() => {
+  function frame() {
     const dt = Math.min(clock.getDelta(), 0.05);
-    readLevel();
     uniforms.uTime.value += dt * (reduced ? 0.25 : 1);
     uniforms.uAmp.value = level.amp; uniforms.uLow.value = level.low; uniforms.uHigh.value = level.high;
-
-    const halfH = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
-    const halfW = halfH * camera.aspect;
-    const p = currentPose();
-    const k = reduced ? 1 : 0.045;
-    state.x = lerp(state.x, p.x * halfW, k);
-    state.y = lerp(state.y, p.y * halfH, k);
-    state.s = lerp(state.s, p.s * (1 + level.low * 0.05), k * 2);
-    state.o = lerp(state.o, audio.paused ? p.o : Math.max(p.o, 0.75), k);
-
-    group.position.set(state.x, state.y, 0);
-    halo.position.x = state.x; halo.position.y = state.y;
-    group.scale.setScalar(state.s);
-    halo.scale.setScalar(state.s);
-    uniforms.uOpacity.value = state.o;
+    uniforms.uOpacity.value = lerp(uniforms.uOpacity.value, 1, 0.03);
+    const s = group.userData.s * (1 + level.low * 0.05);
+    group.scale.setScalar(s); halo.scale.setScalar(s);
     if (!reduced) {
       group.rotation.y = lerp(group.rotation.y, uniforms.uTime.value * 0.06 + mouse.x * 0.6, 0.05);
       group.rotation.x = lerp(group.rotation.x, mouse.y * 0.4, 0.05);
     }
     renderer.render(scene, camera);
-  });
+  }
+  // Only draw while the hero is on screen.
+  new IntersectionObserver(([e]) => renderer.setAnimationLoop(e.isIntersecting ? frame : null)).observe(hero);
 }
 startVoice();
+new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock(); }, { threshold: 0.15 }).observe(hero);
 
-/* ---------- Scroll-driven bits ---------- */
+/* ---------- A day, by ear ---------- */
 const day = document.getElementById('day');
-const track = day.querySelector('.day-track');
-const moments = [...track.children];
-const wave = document.getElementById('wave-path');
-{
-  let d = 'M0 35';
-  for (let x = 0; x <= 1000; x += 4) {
-    const env = 0.35 + 0.65 * Math.abs(Math.sin(x / 90)) * Math.abs(Math.sin(x / 23 + 1));
-    d += ` L${x} ${(35 + Math.sin(x * 0.9) * 30 * env).toFixed(1)}`;
-  }
-  wave.setAttribute('d', d);
-}
-const waveLen = wave.getTotalLength();
-wave.style.strokeDasharray = waveLen;
+const dayTrack = day.querySelector('.day-track');
+const moments = [...dayTrack.children];
+const dayFill = document.getElementById('day-fill');
 
-function onScroll() {
-  nav.classList.toggle('scrolled', scrollY > 40);
-  if (reduced) return;
-  const r = day.getBoundingClientRect();
-  const p = clamp(-r.top / (r.height - innerHeight));
-  const travel = Math.max(0, track.scrollWidth - innerWidth);
-  track.style.transform = `translateX(${-p * travel}px)`;
-  const on = Math.round(p * (moments.length - 1));
-  moments.forEach((m, i) => m.classList.toggle('on', i === on));
-  wave.style.strokeDashoffset = waveLen * (1 - p);
-  tourScroll();
+/* ---------- Creator flow diagram ---------- */
+{
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, parent) => {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    parent.appendChild(el);
+    return el;
+  };
+  const pathsG = document.getElementById('flow-paths');
+  const chipsG = document.getElementById('flow-chips');
+  const ys = [56, 152, 248, 344];
+  const from = ['YouTube', 'Instagram', 'TikTok', 'Podcasts'];
+  const to = ['On the drive', 'On a run', 'In the kitchen', 'Falling asleep'];
+  const W = 150;
+  ys.forEach((y, i) => {
+    const left = `M${W} ${y} C ${W + 60} ${y}, 200 200, 236 200`;
+    const right = `M324 200 C 360 200, ${560 - W - 60} ${y}, ${560 - W} ${y}`;
+    mk('path', { d: left, class: 'path' }, pathsG);
+    mk('path', { d: right, class: 'path' }, pathsG);
+    if (!reduced) {
+      [[left, i * 0.6], [right, 1.2 + i * 0.6]].forEach(([d, begin]) => {
+        const dot = mk('circle', { r: 3.5, class: 'dot', opacity: 0 }, pathsG);
+        mk('animateMotion', { path: d, dur: '1.8s', begin: `${begin}s`, repeatCount: 'indefinite' }, dot);
+        mk('animate', { attributeName: 'opacity', values: '0;1;1;0', dur: '1.8s', begin: `${begin}s`, repeatCount: 'indefinite' }, dot);
+      });
+    }
+    [[0, from[i]], [560 - W, to[i]]].forEach(([x, label]) => {
+      mk('rect', { x, y: y - 22, width: W, height: 44, rx: 22, class: 'chip' }, chipsG);
+      mk('text', { x: x + W / 2, y: y + 5, 'text-anchor': 'middle' }, chipsG).textContent = label;
+    });
+  });
 }
-addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', onScroll);
 
 /* ---------- Phone tour ---------- */
 const phone = document.getElementById('phone');
@@ -256,7 +310,7 @@ const shot = document.getElementById('shot');
 const tour = document.getElementById('tour');
 const steps = [...tour.querySelectorAll('.step')];
 steps.forEach(s => { new Image().src = `assets/shots/${s.dataset.shot}.webp`; });
-let currentShot = 'for-you', spin;
+let currentShot = 'for-you', spin, swapTimer;
 const pointer = { x: 0, y: 0 };
 let scrollTurn = 0;
 
@@ -265,10 +319,10 @@ function showShot(name) {
   currentShot = name;
   const swap = () => { shot.src = `assets/shots/${name}.webp`; };
   if (reduced) return swap();
-  spin?.cancel();
+  spin?.cancel(); clearTimeout(swapTimer);
   spin = phone.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(360deg)' }],
     { duration: 1100, easing: 'cubic-bezier(.65,0,.35,1)' });
-  setTimeout(swap, 550);
+  swapTimer = setTimeout(swap, 550);
 }
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -283,11 +337,6 @@ steps.forEach(s => io.observe(s));
 function applyTilt() {
   tilt.style.transform = `rotateX(${-pointer.y * 16}deg) rotateY(${pointer.x * 26 + scrollTurn}deg)`;
 }
-function tourScroll() {
-  const r = tour.getBoundingClientRect();
-  scrollTurn = (clamp(-r.top / (r.height - innerHeight)) - 0.5) * -24;
-  applyTilt();
-}
 if (!reduced) {
   addEventListener('pointermove', e => {
     const b = tilt.getBoundingClientRect();
@@ -297,6 +346,24 @@ if (!reduced) {
     applyTilt();
   });
 }
+
+/* ---------- Scroll-driven bits ---------- */
+function onScroll() {
+  nav.classList.toggle('scrolled', scrollY > 40);
+  if (reduced) return;
+  const r = day.getBoundingClientRect();
+  const p = clamp(-r.top / (r.height - innerHeight));
+  const travel = Math.max(0, dayTrack.scrollWidth - innerWidth);
+  dayTrack.style.transform = `translate3d(${-p * travel}px,0,0)`;
+  const on = Math.round(p * (moments.length - 1));
+  moments.forEach((m, i) => m.classList.toggle('on', i === on));
+  dayFill.style.width = `${p * 100}%`;
+  const t = tour.getBoundingClientRect();
+  scrollTurn = (clamp(-t.top / (t.height - innerHeight)) - 0.5) * -24;
+  applyTilt();
+}
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', onScroll);
 
 /* ---------- Originals ring ---------- */
 const CHANNELS = [
@@ -311,13 +378,13 @@ const CHANNELS = [
 const ring = document.getElementById('ring');
 const ringStage = document.getElementById('ring-stage');
 const STEP = 360 / CHANNELS.length;
-const cards = CHANNELS.map((c, i) => {
+const cards = CHANNELS.map(c => {
   const a = document.createElement('a');
   a.className = 'chan';
   a.href = `https://api.audiovibe.co/@${c.handle}`;
   a.target = '_blank'; a.rel = 'noopener';
   a.tabIndex = -1;
-  a.innerHTML = `<img src="assets/channels/${c.id}.webp" alt="" width="320" height="320" loading="lazy" draggable="false"><span class="ai">AI</span><span>${c.name}</span>`;
+  a.innerHTML = `<img src="assets/channels/${c.id}.webp" alt="" width="320" height="320" loading="lazy" draggable="false"><span class="ai">AI</span><span class="nm">${c.name}</span>`;
   ring.appendChild(a);
   return a;
 });
@@ -327,9 +394,8 @@ ringStage.setAttribute('aria-label', 'AudioVibe Originals channels');
 
 let rot = 0, target = null, dragging = false, moved = 0, lastX = 0, hover = false, front = -1;
 const info = { name: document.getElementById('chan-name'), about: document.getElementById('chan-about'), link: document.getElementById('chan-link') };
-
-function frontIndex() { return ((Math.round(-rot / STEP) % CHANNELS.length) + CHANNELS.length) % CHANNELS.length; }
-function goTo(i) { target = -i * STEP + Math.round((rot + i * STEP) / 360) * 360; }
+const frontIndex = () => ((Math.round(-rot / STEP) % CHANNELS.length) + CHANNELS.length) % CHANNELS.length;
+const goTo = i => { target = -i * STEP + Math.round((rot + i * STEP) / 360) * 360; };
 
 ringStage.addEventListener('pointerdown', e => { dragging = true; moved = 0; lastX = e.clientX; target = null; });
 addEventListener('pointermove', e => {
@@ -350,7 +416,11 @@ cards.forEach((c, i) => c.addEventListener('click', e => {
   if (moved > 6 || i !== frontIndex()) { e.preventDefault(); if (moved <= 6) goTo(i); }
 }));
 
+let ringVisible = false;
+new IntersectionObserver(([e]) => { ringVisible = e.isIntersecting; }).observe(ringStage);
 (function ringLoop() {
+  requestAnimationFrame(ringLoop);
+  if (!ringVisible && front !== -1) return;
   if (target !== null) { rot = lerp(rot, target, reduced ? 1 : 0.1); if (Math.abs(rot - target) < 0.05) { rot = target; target = null; } }
   else if (!dragging && !hover && !reduced) rot -= 0.05;
   // Cards orbit the ring but always face the viewer.
@@ -370,7 +440,6 @@ cards.forEach((c, i) => c.addEventListener('click', e => {
     info.link.href = `https://api.audiovibe.co/@${c.handle}`;
     info.link.textContent = `Open @${c.handle}`;
   }
-  requestAnimationFrame(ringLoop);
 })();
 
 onScroll();
