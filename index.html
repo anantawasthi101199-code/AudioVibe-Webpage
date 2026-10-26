@@ -3,746 +3,359 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AudioVibe - Listen Differently</title>
-  <meta name="description" content="AudioVibe is the audio-first social platform. Upload your sound, discover creators, and connect with a community that lives for audio." />
-  <meta property="og:title" content="AudioVibe - Listen Differently" />
-  <meta property="og:description" content="The audio-first social platform. Share your sound, discover creators, connect through audio." />
+  <title>AudioVibe: for the hours you can't look at a screen</title>
+  <meta name="description" content="AudioVibe is a feed you listen to. Stories, news, science, comedy and calm, for driving, walking, running, cooking and falling asleep." />
+  <link rel="canonical" href="https://audiovibe.co/" />
+  <link rel="icon" href="assets/av-mark.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#050a14" />
+  <meta property="og:title" content="AudioVibe: your eyes are busy, your ears are free" />
+  <meta property="og:description" content="A feed you listen to. Stories, news, science and comedy for the hours you can't look at a screen." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://audiovibe.co" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="AudioVibe - Listen Differently" />
-  <meta name="twitter:description" content="The audio-first social platform. Share your sound, discover creators, connect through audio." />
+  <meta property="og:url" content="https://audiovibe.co/" />
+  <meta property="og:image" content="https://audiovibe.co/og/default.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://audiovibe.co/og/default.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --blue: #22d3ee;
-      --blue-sky: #22d3ee;
-      --blue-deep: #1f74ec;
-      --blue-darkest: #1554c0;
-      --bg-darkest: #0a0a0a;
-      --bg-dark: #111111;
-      --bg-card: #161616;
-      --bg-elevated: #1e1e1e;
-      --border: #222222;
-      --border-light: #333333;
-      --text-primary: #ffffff;
-      --text-secondary: #a1a1aa;
-      --text-muted: #52525b;
+      --night: #050a14;
+      --deep: #0b1424;
+      --line: rgba(120, 170, 255, 0.14);
+      --cyan: #22d3ee;
+      --azure: #2b8fff;
+      --blue: #1f74ec;
+      --text: #eef4ff;
+      --muted: #8ea3c2;
+      --grad: linear-gradient(100deg, var(--cyan), var(--blue));
+      --gutter: clamp(16px, 5vw, 72px);
     }
-
     html { scroll-behavior: smooth; }
     body {
-      background: var(--bg-darkest);
-      color: var(--text-primary);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
+      background: var(--night); color: var(--text);
+      font-family: 'Nunito', system-ui, sans-serif; font-weight: 600;
+      line-height: 1.6; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+    .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg-darkest); }
-    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+    /* The voice: one canvas behind the whole page */
+    #voice { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .no-webgl #voice { background: radial-gradient(circle at 65% 45%, rgba(34,211,238,.28), rgba(31,116,236,.12) 30%, transparent 55%); }
+    main, nav, footer { position: relative; z-index: 1; }
 
-    /* ── Orbs ── */
-    .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .orb {
-      position: absolute; border-radius: 50%; filter: blur(100px);
-      animation: drift 24s infinite ease-in-out;
-    }
-    .orb-1 { width: 700px; height: 700px; background: var(--blue); opacity: 0.06; top: -300px; left: -200px; animation-delay: 0s; }
-    .orb-2 { width: 600px; height: 600px; background: var(--blue-deep); opacity: 0.07; bottom: -200px; right: -200px; animation-delay: -10s; }
-    .orb-3 { width: 400px; height: 400px; background: var(--blue); opacity: 0.04; top: 40%; left: 40%; animation-delay: -5s; }
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0); }
-      33% { transform: translate(40px, -40px); }
-      66% { transform: translate(-30px, 30px); }
-    }
-
-    /* ── Nav ── */
+    /* Nav */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: 64px; display: flex; align-items: center; justify-content: space-between;
-      padding: 0 6%;
-      background: rgba(10,10,10,0.75);
-      backdrop-filter: blur(24px) saturate(1.4);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px var(--gutter);
+      transition: background .3s, backdrop-filter .3s;
     }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-waveform { display: flex; align-items: center; gap: 3px; height: 26px; }
-    .nav-bar {
-      width: 3px; border-radius: 99px;
-      background: linear-gradient(to top, var(--blue), var(--blue-deep));
-      animation: waveAnim 1.6s ease-in-out infinite;
+    nav.scrolled { background: rgba(5,10,20,.72); backdrop-filter: blur(18px); }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-size: 1.25rem; letter-spacing: -0.01em; }
+    .brand img { width: 34px; height: auto; }
+    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: .95rem; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.pill { color: #fff; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 24px; border-radius: 99px; border: 0; cursor: pointer;
+      font: 800 1rem 'Nunito', sans-serif; text-decoration: none; color: #fff;
+      background: var(--grad); box-shadow: 0 10px 40px -10px rgba(43,143,255,.7);
+      transition: transform .2s, box-shadow .2s;
     }
-    .nav-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
-    .nav-bar:nth-child(2) { height: 75%; animation-delay: 0.12s; }
-    .nav-bar:nth-child(3) { height: 100%; animation-delay: 0.24s; }
-    .nav-bar:nth-child(4) { height: 60%; animation-delay: 0.36s; }
-    .nav-bar:nth-child(5) { height: 40%; animation-delay: 0.48s; }
-    @keyframes waveAnim {
-      0%, 100% { transform: scaleY(1); }
-      50% { transform: scaleY(0.35); }
-    }
-    .nav-brand {
-      font-size: 1rem; font-weight: 800; letter-spacing: 0.02em;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    /* Wordmark: "Audio" stays solid white, "Vibe" shows the blue gradient */
-    .wm-solid { -webkit-text-fill-color: #fff; color: #fff; }
-    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-    .nav-links a {
-      font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #fff; }
-    .nav-cta {
-      padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      color: #fff; text-decoration: none; transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 0 20px rgba(43,143,255,0.25);
-    }
-    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .hamburger span { width: 22px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: 0.3s; }
+    .pill:hover { transform: translateY(-2px); box-shadow: 0 16px 48px -10px rgba(43,143,255,.9); }
+    .pill.small { padding: 9px 18px; font-size: .9rem; }
+    .pill.ghost { background: rgba(255,255,255,.04); border: 1px solid var(--line); box-shadow: none; }
+    .pill.ghost:hover { border-color: rgba(34,211,238,.5); }
+    .menu-btn { display: none; background: none; border: 0; color: var(--text); cursor: pointer; padding: 6px; }
 
-    /* ── Hero ── */
+    /* Hero */
     .hero {
-      position: relative; z-index: 1;
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 120px 6% 80px;
-    }
-    .hero-inner { max-width: 860px; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px; border-radius: 99px; margin-bottom: 36px;
-      border: 1px solid rgba(43,143,255,0.25);
-      background: rgba(43,143,255,0.07);
-      font-size: 0.78rem; font-weight: 700; color: var(--blue);
-      letter-spacing: 0.1em; text-transform: uppercase;
-    }
-    .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
-      animation: pulse 2.2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.7); }
+      min-height: 100svh; display: grid; align-content: end;
+      padding: 120px var(--gutter) clamp(48px, 10vh, 110px);
     }
     .hero h1 {
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      font-weight: 900; line-height: 1.05; letter-spacing: -0.03em;
-      margin-bottom: 28px;
+      font-size: clamp(2.9rem, 7.2vw, 8rem); font-weight: 900;
+      line-height: .95; letter-spacing: -0.045em;
     }
-    .g {
-      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-sub {
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: var(--text-secondary); max-width: 540px;
-      margin: 0 auto 48px; line-height: 1.75;
-    }
-    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 15px 30px; border-radius: 12px;
-      font-size: 1rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      color: #fff; text-decoration: none;
-      box-shadow: 0 0 40px rgba(43,143,255,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 48px rgba(31,116,236,0.4); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 15px 30px; border-radius: 12px;
-      font-size: 1rem; font-weight: 600;
-      background: transparent; color: var(--text-primary);
-      border: 1px solid var(--border-light); text-decoration: none;
-      transition: border-color 0.2s, color 0.2s, transform 0.2s;
-    }
-    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-3px); }
+    .hero h1 span { display: block; }
+    @media (min-width: 861px) { .hero h1 span { white-space: nowrap; } }
+    .hero-foot { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 32px; margin-top: 40px; }
+    .hero p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--muted); max-width: 34ch; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .soon { font-size: .85rem; color: var(--muted); width: 100%; }
+    .sample-note { font-size: .82rem; color: var(--muted); min-height: 1.3em; margin-top: 10px; max-width: 46ch; }
+    .play-ic { width: 18px; height: 18px; }
+    .hero .reveal { opacity: 0; transform: translateY(24px); animation: rise 1s cubic-bezier(.2,.7,.2,1) forwards; }
+    .hero .reveal:nth-child(2) { animation-delay: .15s; }
+    .hero-foot.reveal { animation-delay: .35s; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
 
-    /* ── Waveform visual ── */
-    .hero-visual {
-      margin: 64px auto 0; max-width: 520px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 20px; padding: 28px 32px;
-      position: relative; overflow: hidden;
-    }
-    .hero-visual::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--blue), var(--blue-deep));
-    }
-    .visual-label {
-      font-size: 0.75rem; color: var(--text-muted); font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .playing-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
-      animation: pulse 1.4s infinite;
-    }
-    .waveform-bars {
-      display: flex; align-items: center; gap: 3px; height: 64px; overflow: hidden;
-    }
-    .wb {
-      flex: 1; border-radius: 99px; min-width: 3px;
-      background: linear-gradient(to top, rgba(43,143,255,0.4), var(--blue-deep));
-      animation: waveAnim 1.6s ease-in-out infinite;
-    }
-    .wb:nth-child(1){height:35%;animation-delay:0s}
-    .wb:nth-child(2){height:55%;animation-delay:0.05s}
-    .wb:nth-child(3){height:80%;animation-delay:0.1s}
-    .wb:nth-child(4){height:60%;animation-delay:0.15s}
-    .wb:nth-child(5){height:90%;animation-delay:0.2s}
-    .wb:nth-child(6){height:45%;animation-delay:0.25s}
-    .wb:nth-child(7){height:70%;animation-delay:0.3s}
-    .wb:nth-child(8){height:100%;animation-delay:0.35s}
-    .wb:nth-child(9){height:75%;animation-delay:0.4s}
-    .wb:nth-child(10){height:55%;animation-delay:0.45s}
-    .wb:nth-child(11){height:85%;animation-delay:0.5s}
-    .wb:nth-child(12){height:40%;animation-delay:0.55s}
-    .wb:nth-child(13){height:65%;animation-delay:0.6s}
-    .wb:nth-child(14){height:90%;animation-delay:0.65s}
-    .wb:nth-child(15){height:50%;animation-delay:0.7s}
-    .wb:nth-child(16){height:70%;animation-delay:0.75s}
-    .wb:nth-child(17){height:35%;animation-delay:0.8s}
-    .wb:nth-child(18){height:80%;animation-delay:0.85s}
-    .wb:nth-child(19){height:60%;animation-delay:0.9s}
-    .wb:nth-child(20){height:45%;animation-delay:0.95s}
-    .visual-meta {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 20px;
-    }
-    .visual-track { font-size: 0.85rem; font-weight: 700; }
-    .visual-creator { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
-    .visual-actions { display: flex; align-items: center; gap: 16px; }
-    .visual-icon { color: var(--text-muted); }
+    section { padding: clamp(80px, 14vh, 160px) var(--gutter); }
+    h2 { font-size: clamp(2.2rem, 5.4vw, 4.6rem); font-weight: 900; line-height: 1; letter-spacing: -0.035em; max-width: 14ch; }
+    .lede { color: var(--muted); font-size: clamp(1.05rem, 1.4vw, 1.2rem); max-width: 46ch; margin-top: 20px; }
 
-    /* ── Stats ── */
-    .stats {
-      position: relative; z-index: 1;
-      display: flex; flex-wrap: wrap;
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      background: rgba(16,16,16,0.6);
-    }
-    .stat {
-      flex: 1; min-width: 140px; text-align: center;
-      padding: 40px 24px; border-right: 1px solid var(--border);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-val {
-      font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .stat-lbl { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
+    /* A day, by ear: horizontal timeline pinned while you scroll */
+    .day { padding: 0; height: 520vh; }
+    .day-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+    .day-head { padding: 0 var(--gutter); }
+    .day-track { display: flex; gap: clamp(40px, 7vw, 120px); padding: 56px var(--gutter) 0; will-change: transform; width: max-content; }
+    .moment { width: min(78vw, 400px); flex-shrink: 0; }
+    .moment time { display: block; font-size: clamp(3.4rem, 8vw, 6.4rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; color: rgba(238,244,255,.16); transition: color .5s; }
+    .moment.on time { color: var(--text); }
+    .moment.on time b { font-weight: 900; }
+    .moment h3 { font-size: 1.35rem; font-weight: 900; margin: 14px 0 6px; }
+    .moment p { color: var(--muted); }
+    .day-wave { position: absolute; left: 0; right: 0; bottom: 9vh; height: 70px; width: 100%; }
+    .day-wave path { fill: none; stroke: url(#wg); stroke-width: 2; }
 
-    /* ── Sections ── */
-    section { position: relative; z-index: 1; padding: 100px 6%; }
-    .section-tag {
-      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--blue); margin-bottom: 14px;
-    }
-    .section-h {
-      font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 900;
-      letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 18px;
-    }
-    .section-p {
-      font-size: 1.05rem; color: var(--text-secondary);
-      max-width: 520px; line-height: 1.75;
-    }
-    .divider {
-      width: 40px; height: 3px; border-radius: 2px;
-      background: linear-gradient(to right, var(--blue), var(--blue-deep));
-      margin: 20px 0;
-    }
-    .centered { text-align: center; }
-    .centered .section-p { margin: 0 auto; }
-    .centered .divider { margin: 20px auto; }
+    /* Phone tour */
+    .tour { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-top: 0; }
+    .tour-steps { padding-top: 10vh; }
+    .tour-intro { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; }
+    .step { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; max-width: 30rem; opacity: .28; transition: opacity .5s; }
+    .step.on { opacity: 1; }
+    .step h3 { font-size: clamp(1.8rem, 3.2vw, 2.8rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
+    .step p { color: var(--muted); font-size: 1.12rem; margin-top: 14px; }
+    .stage { position: sticky; top: 0; height: 100svh; display: grid; place-items: center; perspective: 1400px; }
+    .tilt { transform-style: preserve-3d; transition: transform .25s ease-out; }
+    .phone { --w: min(300px, 64vw); --t: 14px; position: relative; width: var(--w); aspect-ratio: 1440 / 3120; transform-style: preserve-3d; }
+    .phone .face { position: absolute; inset: 0; border-radius: calc(var(--w) * .13); backface-visibility: hidden; }
+    .phone .front { background: #000; border: 7px solid #10151f; overflow: hidden; transform: translateZ(calc(var(--t) / 2)); box-shadow: 0 0 0 1px rgba(120,170,255,.25), 0 40px 120px -30px rgba(43,143,255,.55); }
+    .phone .front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .35s; }
+    .phone .back { background: linear-gradient(150deg, #0e1a30, #070d18); border: 1px solid rgba(120,170,255,.2); transform: rotateY(180deg) translateZ(calc(var(--t) / 2)); display: grid; place-items: center; }
+    .phone .back img { width: 34%; }
+    .phone .edge { position: absolute; top: 6%; bottom: 6%; width: var(--t); left: calc(50% - var(--t) / 2); background: linear-gradient(#1a2436, #0c121d); border-radius: 6px; }
+    .phone .edge.l { transform: rotateY(-90deg) translateZ(calc(var(--w) / 2 - 2px)); }
+    .phone .edge.r { transform: rotateY(90deg) translateZ(calc(var(--w) / 2 - 2px)); }
+    .also { margin-top: 10px; display: grid; gap: 10px; color: var(--muted); list-style: none; }
+    .also li { display: flex; gap: 10px; align-items: baseline; }
+    .also li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); flex-shrink: 0; transform: translateY(-2px); }
 
-    /* ── Features ── */
-    #features { background: rgba(14,14,14,0.5); }
-    .features-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px; margin-top: 60px; max-width: 1100px; margin-left: auto; margin-right: auto;
+    /* Originals ring */
+    .originals { text-align: center; overflow: hidden; }
+    .originals h2, .originals .lede { margin-left: auto; margin-right: auto; }
+    .ring-stage { --r: clamp(260px, 34vw, 440px); height: clamp(320px, 46vw, 460px); perspective: 1600px; margin-top: 40px; cursor: grab; touch-action: pan-y; user-select: none; }
+    .ring-stage:active { cursor: grabbing; }
+    .ring { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transform: translateZ(calc(-1 * var(--r))); }
+    .chan {
+      position: absolute; left: 50%; top: 50%; width: clamp(150px, 17vw, 210px); margin-left: calc(clamp(150px, 17vw, 210px) / -2); translate: 0 -50%;
+      text-decoration: none; display: block;
     }
-    .feature-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 18px; padding: 32px;
-      transition: border-color 0.25s, transform 0.25s;
-      position: relative; overflow: hidden;
-    }
-    .feature-card::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--blue), var(--blue-deep));
-      opacity: 0; transition: opacity 0.25s;
-    }
-    .feature-card:hover { border-color: rgba(43,143,255,0.25); transform: translateY(-4px); }
-    .feature-card:hover::after { opacity: 1; }
-    .feature-icon-wrap {
-      width: 48px; height: 48px; border-radius: 13px; margin-bottom: 20px;
-      background: linear-gradient(135deg, rgba(43,143,255,0.12), rgba(31,116,236,0.12));
-      border: 1px solid rgba(43,143,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
-    .feature-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; }
+    .chan img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 28px; border: 1px solid var(--line); box-shadow: 0 30px 60px -30px #000; }
+    .chan span { display: block; margin-top: 12px; font-weight: 800; font-size: 1.02rem; }
+    .chan .ai { position: absolute; top: 10px; right: 10px; margin: 0; padding: 2px 9px; font-size: .75rem; font-weight: 800; border-radius: 8px; background: rgba(5,10,20,.75); border: 1px solid rgba(255,255,255,.35); backdrop-filter: blur(6px); }
+    .chan-info { min-height: 7.5em; margin-top: 8px; }
+    .chan-info h3 { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; }
+    .chan-info p { color: var(--muted); margin: 4px auto 0; max-width: 40ch; }
+    .chan-info a { color: var(--cyan); font-weight: 800; text-decoration: none; display: inline-block; margin-top: 8px; }
+    .chan-info a:hover { text-decoration: underline; }
+    .ring-hint { color: var(--muted); font-size: .85rem; }
+    @media (hover: none) { .ring-hint { display: none; } }
 
-    /* ── How it works ── */
-    .steps {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 32px; margin-top: 60px; max-width: 900px; margin-left: auto; margin-right: auto;
-    }
-    .step { text-align: center; }
-    .step-num {
-      width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 20px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: 900; color: #fff;
-      box-shadow: 0 0 24px rgba(43,143,255,0.3);
-    }
-    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
-    .step p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; max-width: 220px; margin: 0 auto; }
+    /* Make your own */
+    .make { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+    .make ol { list-style: none; display: grid; gap: 28px; counter-reset: s; }
+    .make li { counter-increment: s; display: grid; grid-template-columns: 52px 1fr; gap: 16px; }
+    .make li::before { content: counter(s); width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-weight: 900; font-size: 1.3rem; border: 1px solid var(--line); background: rgba(34,211,238,.06); color: var(--cyan); }
+    .make li h3 { font-size: 1.2rem; font-weight: 900; }
+    .make li p { color: var(--muted); }
+    .invite { margin-top: 32px; color: var(--muted); }
+    .invite a { color: var(--cyan); font-weight: 800; }
 
-    /* ── Share section ── */
-    #share { background: rgba(14,14,14,0.5); }
-    .share-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-      align-items: center; max-width: 1000px; margin: 60px auto 0;
-    }
-    .share-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 20px; overflow: hidden;
-      box-shadow: 0 0 60px rgba(43,143,255,0.08), 0 0 60px rgba(31,116,236,0.06);
-    }
-    .share-card-top {
-      height: 180px;
-      background: linear-gradient(135deg, var(--blue) 0%, #2b8fff 50%, var(--blue-deep) 100%);
-      display: flex; align-items: center; justify-content: center; position: relative;
-    }
-    .share-waveform { display: flex; align-items: center; gap: 4px; height: 48px; }
-    .sw {
-      width: 5px; border-radius: 99px; background: rgba(255,255,255,0.6);
-      animation: waveAnim 1.6s ease-in-out infinite;
-    }
-    .sw:nth-child(1){height:40%;animation-delay:0s}
-    .sw:nth-child(2){height:70%;animation-delay:0.1s}
-    .sw:nth-child(3){height:100%;animation-delay:0.2s}
-    .sw:nth-child(4){height:60%;animation-delay:0.3s}
-    .sw:nth-child(5){height:85%;animation-delay:0.4s}
-    .sw:nth-child(6){height:45%;animation-delay:0.5s}
-    .sw:nth-child(7){height:70%;animation-delay:0.6s}
-    .share-card-body { padding: 24px; }
-    .share-track { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-    .share-creator { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; }
-    .share-btn {
-      display: block; width: 100%; padding: 12px;
-      border-radius: 10px; text-align: center; text-decoration: none;
-      font-size: 0.875rem; font-weight: 700; color: #fff;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-    }
-    .share-copy { display: flex; flex-direction: column; gap: 16px; }
-    .share-copy h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; }
-    .share-copy p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.75; }
-    .share-detail {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px; border-radius: 10px;
-      border: 1px solid var(--border); background: rgba(255,255,255,0.02);
-    }
-    .sd-icon {
-      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(43,143,255,0.15), rgba(31,116,236,0.15));
-      border: 1px solid rgba(43,143,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .sd-text strong { display: block; font-size: 0.88rem; margin-bottom: 2px; }
-    .sd-text span { font-size: 0.8rem; color: var(--text-muted); }
+    /* Download */
+    .download { min-height: 100svh; display: grid; place-content: center; text-align: center; justify-items: center; gap: 28px; }
+    .download h2 { max-width: none; }
+    .download h2 span { display: block; }
+    .download .hero-actions { justify-content: center; }
 
-    /* ── Download CTA ── */
-    #download {
-      text-align: center;
-      background: linear-gradient(180deg, transparent 0%, rgba(43,143,255,0.03) 50%, transparent 100%);
-    }
-    .download-card {
-      max-width: 600px; margin: 48px auto 0;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 24px; padding: 56px 48px;
-      position: relative; overflow: hidden;
-      box-shadow: 0 0 80px rgba(43,143,255,0.06);
-    }
-    .download-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--blue), var(--blue-deep));
-    }
-    .download-logo { display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 24px; }
-    .dl-waveform { display: flex; align-items: center; gap: 4px; height: 40px; }
-    .dlw {
-      width: 5px; border-radius: 99px;
-      background: linear-gradient(to top, var(--blue), var(--blue-deep));
-      animation: waveAnim 1.6s ease-in-out infinite;
-    }
-    .dlw:nth-child(1){height:40%;animation-delay:0s}
-    .dlw:nth-child(2){height:75%;animation-delay:0.12s}
-    .dlw:nth-child(3){height:100%;animation-delay:0.24s}
-    .dlw:nth-child(4){height:65%;animation-delay:0.36s}
-    .dlw:nth-child(5){height:40%;animation-delay:0.48s}
-    .download-brand {
-      font-size: 1.8rem; font-weight: 900;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .download-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
-    .download-card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 32px; }
-    .store-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .store-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 12px 22px; border-radius: 11px;
-      background: var(--bg-elevated); border: 1px solid var(--border-light);
-      color: var(--text-primary); text-decoration: none;
-      transition: border-color 0.2s, transform 0.2s, background 0.2s;
-    }
-    .store-btn:hover { border-color: var(--blue); background: rgba(43,143,255,0.06); transform: translateY(-2px); }
-    .store-btn-label { text-align: left; }
-    .store-btn-sub { display: block; font-size: 0.7rem; color: var(--text-muted); }
-    .store-btn-name { display: block; font-size: 0.95rem; font-weight: 700; }
-    .coming-soon {
-      margin-top: 14px; font-size: 0.8rem; color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
+    footer { border-top: 1px solid var(--line); padding: 32px var(--gutter) 40px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; background: var(--night); }
+    footer small { color: var(--muted); font-size: .82rem; }
+    .foot-links { display: flex; flex-wrap: wrap; gap: 22px; }
+    .foot-links a { color: var(--muted); text-decoration: none; font-size: .9rem; }
+    .foot-links a:hover { color: var(--text); }
 
-    /* ── Footer ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 36px 6%;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    @media (max-width: 860px) {
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: flex-start; gap: 18px; padding: 20px var(--gutter) 28px; background: rgba(5,10,20,.96); }
+      .nav-links.open { display: flex; }
+      .menu-btn { display: block; }
+      .tour { grid-template-columns: 1fr; gap: 0; }
+      .stage { order: -1; height: 56svh; padding-top: 60px; z-index: 2; background: linear-gradient(rgba(5,10,20,.94) 82%, transparent); }
+      .phone { --w: min(160px, 36vw); }
+      .tour-steps { padding-top: 0; }
+      .tour-intro { min-height: 40vh; }
+      .step { min-height: 62vh; }
+      .make { grid-template-columns: 1fr; }
     }
-    .footer-left { display: flex; flex-direction: column; gap: 6px; }
-    .footer-brand {
-      font-size: 0.9rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .footer-copy { font-size: 0.78rem; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-    .footer-links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--blue); }
-
-    /* ── Glow divider ── */
-    .glow-line {
-      position: relative; z-index: 1;
-      height: 1px; max-width: 180px; margin: 0 auto;
-      background: linear-gradient(to right, transparent, var(--blue), var(--blue-deep), transparent);
-      opacity: 0.4;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .share-grid { grid-template-columns: 1fr; gap: 40px; }
-      .share-card { max-width: 400px; margin: 0 auto; }
-    }
-    @media (max-width: 680px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .download-card { padding: 36px 24px; }
-      footer { flex-direction: column; align-items: flex-start; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero .reveal { animation: none; opacity: 1; transform: none; }
+      .day { height: auto; }
+      .day-pin { position: static; height: auto; padding: 100px 0; }
+      .day-track { flex-direction: column; width: auto; transform: none !important; }
+      .moment time { color: var(--text); }
+      .day-wave { display: none; }
     }
   </style>
 </head>
 <body>
+<canvas id="voice" aria-hidden="true"></canvas>
 
-<div class="orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
-
-<!-- Nav -->
-<nav>
-  <a href="/" class="nav-logo">
-    <div class="nav-waveform">
-      <div class="nav-bar"></div>
-      <div class="nav-bar"></div>
-      <div class="nav-bar"></div>
-      <div class="nav-bar"></div>
-      <div class="nav-bar"></div>
-    </div>
-    <span class="nav-brand"><span class="wm-solid">Audio</span>Vibe</span>
+<nav id="nav">
+  <a class="brand" href="#top" aria-label="AudioVibe home">
+    <img src="assets/av-mark.svg" alt="" width="34" height="20" />
+    <span>Audio<span class="grad">Vibe</span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#how-it-works">How It Works</a></li>
-    <li><a href="#share">Share</a></li>
+  <button class="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="links">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <ul class="nav-links" id="links">
+    <li><a href="#day">A day, by ear</a></li>
+    <li><a href="#tour">The app</a></li>
+    <li><a href="#originals">Originals</a></li>
+    <li><a href="#make">Make your own</a></li>
     <li><a href="support.html">Support</a></li>
-    <li><a href="privacy.html">Privacy</a></li>
-    <li><a href="#download" class="nav-cta">Download</a></li>
+    <li><a class="pill small" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">Get the app</a></li>
   </ul>
-  <div class="hamburger">
-    <span></span><span></span><span></span>
-  </div>
 </nav>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">
-      <div class="badge-dot"></div>
-      Now available on Android
-    </div>
+<main id="top">
+  <section class="hero" data-voice="hero">
     <h1>
-      Your sound.<br/>
-      <span class="g">Your audience.</span>
+      <span class="reveal">Your eyes are busy.</span>
+      <span class="reveal grad">Your ears are free.</span>
     </h1>
-    <p class="hero-sub">
-      AudioVibe is the audio-first social platform. Upload your tracks, discover creators, and build a community that lives for sound.
-    </p>
+    <div class="hero-foot reveal">
+      <p>AudioVibe is a feed you listen to. Stories, news, science, comedy and calm, for the hours you can't look at a screen.</p>
+      <div>
+        <div class="hero-actions">
+          <a class="pill" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">
+            <svg class="play-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3.5v17l15-8.5z"/></svg>
+            Get it on Google Play
+          </a>
+          <button class="pill ghost sample-btn" type="button" aria-pressed="false">
+            <svg class="play-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 11v2"/></svg>
+            <span>Hear a sample</span>
+          </button>
+        </div>
+        <p class="sample-note" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="day" id="day" data-voice="day">
+    <div class="day-pin">
+      <div class="day-head">
+        <h2>A day, by ear</h2>
+        <p class="lede">Most of the day your hands and eyes are already taken. AudioVibe fits into the gaps.</p>
+      </div>
+      <div class="day-track">
+        <article class="moment"><time>07:40</time><h3>Driving in</h3><p>The world's news in under two minutes, read by The Global Thread.</p></article>
+        <article class="moment"><time>12:30</time><h3>Walking the dog</h3><p>Autoscroll moves the feed on by itself. One tap at the door is the only tap.</p></article>
+        <article class="moment"><time>15:05</time><h3>Underground, no signal</h3><p>Downloads keep playing offline. Sort them into folders for the commute, the run and bedtime.</p></article>
+        <article class="moment"><time>18:15</time><h3>On a run</h3><p>Lock screen and headphone controls. Skip back ten seconds without breaking stride.</p></article>
+        <article class="moment"><time>19:40</time><h3>Cooking</h3><p>A series moves to the next episode on its own and remembers exactly where you stopped.</p></article>
+        <article class="moment"><time>23:10</time><h3>Lights out</h3><p>Set the sleep timer. It fades out and stops, so you don't have to reach for the phone.</p></article>
+      </div>
+      <svg class="day-wave" viewBox="0 0 1000 70" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="wg"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#1f74ec"/></linearGradient></defs>
+        <path id="wave-path" d=""/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="tour" id="tour" data-voice="tour">
+    <div class="tour-steps">
+      <div class="tour-intro">
+        <h2>Built to be heard, not stared at</h2>
+        <p class="lede">These are real screens from the app. Scroll, and move your cursor over the phone.</p>
+      </div>
+      <div class="step" data-shot="for-you"><h3>A feed you listen to</h3><p>For You plays one thing after another and learns from what you actually finish. Put the phone in your pocket and it keeps going.</p></div>
+      <div class="step" data-shot="now-playing"><h3>Controls where your hands are</h3><p>Pause, skip and jump back ten seconds from the lock screen, the notification shade or your headphones.</p></div>
+      <div class="step" data-shot="series-detail"><h3>Series that keep going</h3><p>Follow a series and it moves on to the next episode by itself, then tells you when a new one lands.</p></div>
+      <div class="step" data-shot="discover-rails"><h3>Pick a lane</h3><p>Stories, news, comedy, science and tech, health, history. Browse by category instead of taking whatever comes next.</p></div>
+      <div class="step" data-shot="sleep-timer"><h3>Falls asleep with you</h3><p>Choose a time, or the end of the episode. The audio fades out and stops on its own.</p></div>
+      <div class="step" data-shot="creator-profile">
+        <h3>Every voice has a home</h3>
+        <p>Follow a creator and their new work rises to the top of your feed instead of getting buried.</p>
+        <ul class="also">
+          <li>Voice notes and shared audio in messages</li>
+          <li>Downloads in folders, for listening offline</li>
+          <li>Playlists you can copy from friends</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="tilt">
+        <div class="phone" id="phone">
+          <div class="face front"><img id="shot" src="assets/shots/for-you.webp" alt="" width="720" height="1560" /></div>
+          <div class="face back"><img src="assets/av-mark.svg" alt="" /></div>
+          <div class="edge l"></div><div class="edge r"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="originals" id="originals" data-voice="originals">
+    <h2>AudioVibe Originals</h2>
+    <p class="lede">Seven shows made in our own studio. The hosts are AI voices, so every Original carries an AI label. Drag the ring to look around.</p>
+    <div class="ring-stage" id="ring-stage">
+      <div class="ring" id="ring"></div>
+    </div>
+    <div class="chan-info" aria-live="polite">
+      <h3 id="chan-name"></h3>
+      <p id="chan-about"></p>
+      <a id="chan-link" href="#" target="_blank" rel="noopener">Open the channel</a>
+    </div>
+    <p class="ring-hint">Use the left and right arrow keys when the ring is focused.</p>
+  </section>
+
+  <section class="make" id="make" data-voice="make">
+    <div>
+      <h2>Make your own</h2>
+      <p class="lede">If you have something worth hearing, you can publish it from your phone. Listeners stay to the end, because they came to listen.</p>
+      <p class="invite">Creator accounts open with an invite code. <a href="mailto:generalinquiries@audiovibe.co?subject=Creator%20invite%20code">Ask for a code</a> and tell us what you'd make.</p>
+    </div>
+    <ol>
+      <li><div><h3>Record and publish</h3><p>Record in the app or upload a file, add a title and cover art, and it's live.</p></div></li>
+      <li><div><h3>Group episodes into a series</h3><p>Listeners follow the series, and the next episode reaches them on its own.</p></div></li>
+      <li><div><h3>Share one link</h3><p>Every audio, series and profile has a link that unfurls into a preview card and opens straight in the app.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="download" id="download" data-voice="download">
+    <h2><span>Put the phone away.</span> <span class="grad">Keep listening.</span></h2>
     <div class="hero-actions">
-      <a href="https://play.google.com/store/apps/details?id=co.audiovibe" class="btn-primary" target="_blank" rel="noopener">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      <a class="pill" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">
+        <svg class="play-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3.5v17l15-8.5z"/></svg>
         Get it on Google Play
       </a>
-      <a href="#features" class="btn-secondary">
-        See Features
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
+      <span class="pill ghost" aria-disabled="true">App Store coming soon</span>
     </div>
+    <p class="lede">Free to download. Free to listen.</p>
+  </section>
+</main>
 
-    <div class="hero-visual">
-      <div class="visual-label">
-        <div class="playing-dot"></div>
-        Now Playing
-      </div>
-      <div class="waveform-bars">
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
-      </div>
-      <div class="visual-meta">
-        <div>
-          <div class="visual-track">Late Night Sessions</div>
-          <div class="visual-creator">@creator · 3:42</div>
-        </div>
-        <div class="visual-actions">
-          <svg class="visual-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <svg class="visual-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Stats -->
-<div class="stats">
-  <div class="stat"><div class="stat-val">Audio</div><div class="stat-lbl">First Platform</div></div>
-  <div class="stat"><div class="stat-val">Free</div><div class="stat-lbl">Always</div></div>
-  <div class="stat"><div class="stat-val">UK</div><div class="stat-lbl">Registered Company</div></div>
-  <div class="stat"><div class="stat-val">Android</div><div class="stat-lbl">Available Now</div></div>
-</div>
-
-<!-- Features -->
-<section id="features">
-  <div class="centered">
-    <p class="section-tag">What You Get</p>
-    <h2 class="section-h">Everything a creator <span class="g">needs</span></h2>
-    <div class="divider"></div>
-    <p class="section-p">Built from the ground up for audio creators. Every feature is designed around sound first.</p>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </div>
-      <h3>Upload Any Audio</h3>
-      <p>MP3, WAV, M4A, FLAC. Upload any format. Add cover art, title, and description. Your track is live in seconds.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      </div>
-      <h3>Build Your Following</h3>
-      <p>Follow creators, get notified when they drop new audio, and grow your own audience organically through great content.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </div>
-      <h3>Discover New Sound</h3>
-      <p>A personalised For You feed and trending discovery tab surface audio you'll love, from genres you follow to new ones you'll discover.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </div>
-      <h3>Direct Messaging</h3>
-      <p>Connect directly with creators and fans. Send voice messages, text, and share audio tracks in conversation.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      </div>
-      <h3>Series & Episodes</h3>
-      <p>Organise your content into series. Perfect for podcasts, albums, or audio diaries. Listeners follow the series, not just you.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      </div>
-      <h3>Creator Profile</h3>
-      <p>A beautiful profile page, shareable link, and full audio portfolio. Your own page on the web at audiovibe.co/@you.</p>
-    </div>
-  </div>
-</section>
-
-<div class="glow-line"></div>
-
-<!-- How it works -->
-<section id="how-it-works">
-  <div class="centered">
-    <p class="section-tag">Simple by Design</p>
-    <h2 class="section-h">Up and running in <span class="g">three steps</span></h2>
-    <div class="divider"></div>
-    <p class="section-p">No learning curve. Create an account, upload your first track, and start growing your audience today.</p>
-  </div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Create Your Account</h3>
-      <p>Sign up in seconds. Choose a username that becomes your permanent audiovibe.co URL.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>Upload Your Audio</h3>
-      <p>Tap upload, pick your file, add cover art and a title. Your track is live and playable immediately.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Share & Grow</h3>
-      <p>Every track gets a share link with a rich preview card. Share anywhere (Instagram, WhatsApp, X), one tap opens the app.</p>
-    </div>
-  </div>
-</section>
-
-<div class="glow-line"></div>
-
-<!-- Share -->
-<section id="share">
-  <div class="share-grid">
-    <div class="share-card">
-      <div class="share-card-top">
-        <div class="share-waveform">
-          <div class="sw"></div><div class="sw"></div><div class="sw"></div>
-          <div class="sw"></div><div class="sw"></div><div class="sw"></div><div class="sw"></div>
-        </div>
-      </div>
-      <div class="share-card-body">
-        <div class="share-track">Late Night Sessions</div>
-        <div class="share-creator">by @creator on AudioVibe</div>
-        <a href="#download" class="share-btn">Listen on AudioVibe</a>
-      </div>
-    </div>
-    <div class="share-copy">
-      <p class="section-tag">Shareable Links</p>
-      <h2>Every track gets a <span class="g">beautiful preview</span></h2>
-      <p>When you share a track link, it unfurls into a rich preview card on any social platform, with your cover art, title, and a direct link that opens the app instantly.</p>
-      <div class="share-detail">
-        <div class="sd-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-        </div>
-        <div class="sd-text">
-          <strong>Your permanent URL</strong>
-          <span>audiovibe.co/@yourname, share your profile anywhere</span>
-        </div>
-      </div>
-      <div class="share-detail">
-        <div class="sd-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-deep)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="sd-text">
-          <strong>Smart deep link</strong>
-          <span>Opens directly in the app, no friction, just audio</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="glow-line"></div>
-
-<!-- Download -->
-<section id="download">
-  <p class="section-tag centered">Get Started</p>
-  <h2 class="section-h centered">Listen <span class="g">differently</span></h2>
-  <div class="glow-line" style="margin-bottom:0"></div>
-  <div class="download-card">
-    <div class="download-logo">
-      <div class="dl-waveform">
-        <div class="dlw"></div><div class="dlw"></div><div class="dlw"></div>
-        <div class="dlw"></div><div class="dlw"></div>
-      </div>
-      <div class="download-brand"><span class="wm-solid">Audio</span>Vibe</div>
-    </div>
-    <h2>Free to download.<br/>Free to create.</h2>
-    <p>Join creators sharing their sound on AudioVibe. Upload, discover, and connect, all in one app.</p>
-    <div class="store-buttons">
-      <a href="https://play.google.com/store/apps/details?id=co.audiovibe" class="store-btn" target="_blank" rel="noopener">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-        <div class="store-btn-label">
-          <span class="store-btn-sub">Get it on</span>
-          <span class="store-btn-name">Google Play</span>
-        </div>
-      </a>
-      <a href="#" class="store-btn" style="opacity:0.45; cursor:default;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
-        <div class="store-btn-label">
-          <span class="store-btn-sub">Coming soon</span>
-          <span class="store-btn-name">App Store</span>
-        </div>
-      </a>
-    </div>
-    <div class="coming-soon">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      iOS coming soon
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
 <footer>
-  <div class="footer-left">
-    <div class="footer-brand"><span class="wm-solid">Audio</span>Vibe</div>
-    <div class="footer-copy">© 2026 Alpha Tech Labs Ltd. Registered in England &amp; Wales.</div>
-  </div>
-  <div class="footer-links">
-    <a href="#features">Features</a>
-    <a href="#how-it-works">How It Works</a>
+  <small>&copy; 2026 Alpha Tech Labs Ltd. Registered in England and Wales.</small>
+  <div class="foot-links">
     <a href="support.html">Support</a>
-    <a href="privacy.html">Privacy Policy</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="delete-account.html">Delete account</a>
     <a href="mailto:generalinquiries@audiovibe.co">Contact</a>
   </div>
 </footer>
 
-<script>
-  // Hamburger menu
-  document.querySelector('.hamburger').addEventListener('click', function() {
-    var links = document.querySelector('.nav-links');
-    links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-    links.style.flexDirection = 'column';
-    links.style.position = 'absolute';
-    links.style.top = '64px';
-    links.style.left = '0';
-    links.style.right = '0';
-    links.style.background = 'rgba(10,10,10,0.98)';
-    links.style.padding = '20px 6%';
-    links.style.borderBottom = '1px solid #222';
-    links.style.gap = '16px';
-  });
-</script>
+<audio id="sample" src="assets/sample.m4a" preload="none" crossorigin="anonymous"></audio>
 
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js" } }</script>
+<script type="module" src="assets/site.js"></script>
 </body>
 </html>
