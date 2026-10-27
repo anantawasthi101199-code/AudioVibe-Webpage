@@ -170,25 +170,21 @@
     .dial { width: min(100%, 500px); height: auto; overflow: visible; }
     .dial text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; fill: var(--muted); transition: fill .5s; }
     @media (max-width: 600px) { .dial text { font-size: 17px; } .dial .num { font-size: 50px; } .dial .ctr { font-size: 15px; } }
-    .dial .ic { fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .dial .ic.edge { stroke: var(--cyan); }
-    .dial .ic.night { stroke: rgba(238,244,255,.55); }
-    .dial .ph { font-size: 12px; font-weight: 700; fill: rgba(142,163,194,.85); }
-    .dial .edge { font-size: 14px; font-weight: 900; fill: var(--text); }
-    .dial .edge .t { font-weight: 700; fill: var(--muted); }
     .dial .num { font-size: 46px; font-weight: 900; fill: var(--text); letter-spacing: -1px; }
     .dial .ctr { font-size: 13px; font-weight: 700; fill: var(--muted); }
+    .dial .zz { fill: none; stroke: #eef4ff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
     .dial .seg { fill: none; stroke-width: 24; stroke-dasharray: 1 1; stroke-dashoffset: 1; stroke: rgba(120,170,255,.16);
       transition: stroke-dashoffset 1.2s cubic-bezier(.3,.7,.2,1), stroke .6s, filter .6s; }
     .dial.in .seg { stroke-dashoffset: 0; }
     .dial .seg.busy { stroke: rgba(120,170,255,.05); }
+    .dial .seg.sleep { stroke: #5a6886; }
     .dial.lit-screen .seg.screen { stroke: rgba(238,244,255,.8); }
     .dial.lit-ear .seg.ear { stroke: url(#dg); filter: drop-shadow(0 0 8px rgba(34,211,238,.5)); }
     .dial.lit-screen .lbl.screen, .dial.lit-ear .lbl.ear { fill: var(--text); }
     .dial .hand { transform-origin: 220px 220px; animation: hand 32s linear infinite; }
     .dial .hand line { stroke: rgba(238,244,255,.3); stroke-width: 1.5; }
     .dial .hand circle { fill: var(--cyan); filter: drop-shadow(0 0 6px #22d3ee); }
-    @keyframes hand { from { transform: rotate(13deg); } to { transform: rotate(347deg); } }
+    @keyframes hand { to { transform: rotate(360deg); } }
     .modes { display: inline-flex; padding: 4px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
     .modes button { border: 0; background: none; cursor: pointer; padding: 8px 16px; border-radius: 99px; font-weight: 800; font-size: .9rem; color: var(--muted); transition: background .3s, color .3s; }
     .modes button[aria-pressed="true"] { color: #fff; background: var(--grad); }
@@ -198,6 +194,7 @@
     .legend .screen i { background: rgba(238,244,255,.8); }
     .legend .ear i { background: var(--grad); box-shadow: 0 0 10px rgba(34,211,238,.5); }
     .legend .busy i { background: rgba(120,170,255,.18); }
+    .legend .sleep i { background: #5a6886; }
     .dial-note { color: var(--muted); font-size: .8rem; }
 
     /* Quiet texture so the lower sections are not flat */
@@ -444,7 +441,7 @@
         <p class="fine">Creator accounts open with an invite code. Tell us where your audience is today and what you'd like to make.</p>
       </div>
       <div class="dial-wrap">
-        <svg class="dial" id="dial" viewBox="-70 -40 580 500" role="img" aria-label="An example weekday, from waking up at 07:00 to going to bed at 23:00. Watching video, a fan has about 1 hour 45 minutes of screen time. Add listening while commuting, working, at the gym, cooking and winding down, and you can reach them for about 11 hours.">
+        <svg class="dial" id="dial" viewBox="-70 -20 580 480" role="img" aria-label="An example weekday on a 24-hour clock, with sleep from 23:00 to 07:00 at the top. Watching video, a fan has about 1 hour 45 minutes of screen time. Add listening while commuting, working, at the gym, cooking and winding down, and you can reach them for about 11 hours.">
           <defs><linearGradient id="dg" gradientUnits="userSpaceOnUse" x1="60" y1="60" x2="380" y2="380"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#1f74ec"/></linearGradient></defs>
           <g id="dial-g"></g>
           <g class="hand"><line x1="220" y1="220" x2="220" y2="100"/><circle cx="220" cy="100" r="4"/></g>
@@ -460,8 +457,9 @@
           <li class="screen"><i></i>Screen time</li>
           <li class="ear"><i></i>Listening time</li>
           <li class="busy"><i></i>Busy</li>
+          <li class="sleep"><i></i>Sleep</li>
         </ul>
-        <p class="dial-note">An example weekday, 07:00 to 23:00.</p>
+        <p class="dial-note">An example weekday.</p>
       </div>
     </div>
   </section>
