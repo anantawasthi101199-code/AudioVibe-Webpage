@@ -166,27 +166,34 @@
     @media (min-width: 961px) { .creator h2 span { white-space: nowrap; } }
     .creator h2 span { display: block; }
     .fine { color: var(--muted); font-size: .9rem; margin-top: 14px; max-width: 46ch; }
-    .dial-wrap { display: grid; justify-items: center; gap: 18px; }
-    .dial { width: min(100%, 460px); height: auto; overflow: visible; }
-    .dial text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; fill: var(--text); }
-    .dial .hr { font-size: 12px; font-weight: 700; fill: var(--muted); }
-    .dial .ctr { font-size: 15px; fill: var(--muted); font-weight: 700; }
-    .dial .track { fill: none; stroke: rgba(120,170,255,.08); }
-    .dial .tick { stroke: rgba(120,170,255,.22); stroke-width: 1.5; }
-    .dial .seg { fill: none; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s cubic-bezier(.3,.7,.2,1); }
-    .dial .seg.screen { stroke: rgba(238,244,255,.45); }
-    .dial .seg.ear { stroke: url(#dg); filter: drop-shadow(0 0 8px rgba(34,211,238,.45)); }
+    .dial-wrap { display: grid; justify-items: center; gap: 16px; }
+    .dial { width: min(100%, 500px); height: auto; overflow: visible; }
+    .dial text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; fill: var(--muted); transition: fill .5s; }
+    @media (max-width: 600px) { .dial text { font-size: 17px; } .dial .num { font-size: 50px; } .dial .ctr { font-size: 15px; } }
+    .dial .hr { font-size: 12px; font-weight: 700; fill: rgba(142,163,194,.7); }
+    .dial .num { font-size: 46px; font-weight: 900; fill: var(--text); letter-spacing: -1px; }
+    .dial .ctr { font-size: 13px; font-weight: 700; fill: var(--muted); }
+    .dial .seg { fill: none; stroke-width: 24; stroke-dasharray: 1 1; stroke-dashoffset: 1; stroke: rgba(120,170,255,.16);
+      transition: stroke-dashoffset 1.2s cubic-bezier(.3,.7,.2,1), stroke .6s, filter .6s; }
     .dial.in .seg { stroke-dashoffset: 0; }
-    .dial .lbl { opacity: 0; transition: opacity .6s .9s; }
-    .dial.in .lbl { opacity: 1; }
-    .dial .hand { transform-origin: 220px 220px; animation: hand 24s linear infinite; }
-    .dial .hand line { stroke: rgba(238,244,255,.35); stroke-width: 1.5; }
+    .dial .seg.busy { stroke: rgba(120,170,255,.05); }
+    .dial.lit-screen .seg.screen { stroke: rgba(238,244,255,.8); }
+    .dial.lit-ear .seg.ear { stroke: url(#dg); filter: drop-shadow(0 0 8px rgba(34,211,238,.5)); }
+    .dial.lit-screen .lbl.screen, .dial.lit-ear .lbl.ear { fill: var(--text); }
+    .dial .hand { transform-origin: 220px 220px; animation: hand 32s linear infinite; }
+    .dial .hand line { stroke: rgba(238,244,255,.3); stroke-width: 1.5; }
     .dial .hand circle { fill: var(--cyan); filter: drop-shadow(0 0 6px #22d3ee); }
     @keyframes hand { to { transform: rotate(360deg); } }
-    .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 24px; color: var(--muted); font-size: .92rem; list-style: none; }
-    .legend li { display: flex; align-items: center; gap: 10px; }
-    .legend i { width: 22px; height: 6px; border-radius: 6px; background: rgba(238,244,255,.45); }
+    .modes { display: inline-flex; padding: 4px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .modes button { border: 0; background: none; cursor: pointer; padding: 8px 16px; border-radius: 99px; font-weight: 800; font-size: .9rem; color: var(--muted); transition: background .3s, color .3s; }
+    .modes button[aria-pressed="true"] { color: #fff; background: var(--grad); }
+    .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; color: var(--muted); font-size: .88rem; list-style: none; }
+    .legend li { display: flex; align-items: center; gap: 8px; }
+    .legend i { width: 18px; height: 6px; border-radius: 6px; }
+    .legend .screen i { background: rgba(238,244,255,.8); }
     .legend .ear i { background: var(--grad); box-shadow: 0 0 10px rgba(34,211,238,.5); }
+    .legend .busy i { background: rgba(120,170,255,.18); }
+    .dial-note { color: var(--muted); font-size: .8rem; }
 
     /* Quiet texture so the lower sections are not flat */
     body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -420,7 +427,7 @@
         <p class="lede">You've built an audience that knows your face, your voice and what you make. AudioVibe gives your work a second home, built for the hours they can't watch a screen: the commute, the gym, the kitchen and the walk home.</p>
         <ul class="perks">
           <li><span class="pi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-            <div><h3>Win the hours a screen can't</h3><p>Your fans spend hours every day driving, training and cooking. Give them an audio version of what you make, and you're part of those hours too.</p></div></li>
+            <div><h3>Win the hours a screen can't</h3><p>Your fans spend hours every day commuting, working, training and cooking. Give them an audio version of what you make, and you're part of those hours too.</p></div></li>
           <li><span class="pi"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
             <div><h3>Bring them over with one link</h3><p>Share your profile wherever you already post. It shows a preview card and opens straight in the app.</p></div></li>
           <li><span class="pi"><svg viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h8"/><path d="M17 15l4 3-4 3z"/></svg></span>
@@ -432,17 +439,23 @@
         <p class="fine">Creator accounts open with an invite code. Tell us where your audience is today and what you'd like to make.</p>
       </div>
       <div class="dial-wrap">
-        <svg class="dial" id="dial" viewBox="0 0 440 440" role="img" aria-label="A fan's day on a 24-hour clock. A little of it is screen time, where your other channels reach them. The commute, the gym, cooking and bedtime are listening time, where AudioVibe reaches them.">
+        <svg class="dial" id="dial" viewBox="-70 -20 580 480" role="img" aria-label="An example weekday from 07:00 to 23:00. Watching video, a fan has about 1 hour 45 minutes of screen time. Add listening while commuting, working, at the gym, cooking and winding down, and you can reach them for about 11 hours.">
           <defs><linearGradient id="dg" gradientUnits="userSpaceOnUse" x1="60" y1="60" x2="380" y2="380"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#1f74ec"/></linearGradient></defs>
           <g id="dial-g"></g>
-          <g class="hand"><line x1="220" y1="220" x2="220" y2="96"/><circle cx="220" cy="96" r="4"/></g>
-          <image href="assets/av-icon.png" x="188" y="172" width="64" height="64" clip-path="inset(0 round 15px)"/>
-          <text class="ctr" x="220" y="262" text-anchor="middle">A fan's day</text>
+          <g class="hand"><line x1="220" y1="220" x2="220" y2="100"/><circle cx="220" cy="100" r="4"/></g>
+          <text class="num" id="dial-num" x="220" y="226" text-anchor="middle">1h 45m</text>
+          <text class="ctr" id="dial-sub" x="220" y="252" text-anchor="middle">you can reach them today</text>
         </svg>
+        <div class="modes" role="group" aria-label="Compare">
+          <button type="button" data-mode="screen" aria-pressed="true">Video only</button>
+          <button type="button" data-mode="ear" aria-pressed="false">With AudioVibe</button>
+        </div>
         <ul class="legend">
-          <li><i></i>Screen time, where you reach them now</li>
-          <li class="ear"><i></i>Listening time, where AudioVibe reaches them</li>
+          <li class="screen"><i></i>Screen time</li>
+          <li class="ear"><i></i>Listening time</li>
+          <li class="busy"><i></i>Busy</li>
         </ul>
+        <p class="dial-note">An example weekday, 07:00 to 23:00.</p>
       </div>
     </div>
   </section>

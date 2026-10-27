@@ -302,53 +302,88 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
   }
 }
 
-/* ---------- A fan's day: 24-hour dial ---------- */
+/* ---------- A fan's waking day: dial ---------- */
+// 07:00 at the top, 23:00 back round to it. Every slot is filled, so the
+// comparison is honest: screen time alone, then screen time plus listening time.
 {
   const NS = 'http://www.w3.org/2000/svg';
   const g = document.getElementById('dial-g');
   const dial = document.getElementById('dial');
-  const C = 220, R = 150;
+  const num = document.getElementById('dial-num');
+  const sub = document.getElementById('dial-sub');
+  const C = 220, R = 150, START = 7, SPAN = 16;
   const mk = (tag, attrs) => {
     const el = document.createElementNS(NS, tag);
     for (const k in attrs) el.setAttribute(k, attrs[k]);
     g.appendChild(el);
     return el;
   };
-  // Midnight at the top, clockwise.
   const pt = (h, r) => {
-    const a = (h / 24) * Math.PI * 2 - Math.PI / 2;
+    const a = ((h - START) / SPAN) * Math.PI * 2 - Math.PI / 2;
     return [C + Math.cos(a) * r, C + Math.sin(a) * r];
   };
-  mk('circle', { cx: C, cy: C, r: R, class: 'track', 'stroke-width': 26 });
-  for (let h = 0; h < 24; h += 3) {
-    const [x1, y1] = pt(h, R + 18), [x2, y2] = pt(h, R + 24);
-    mk('line', { x1, y1, x2, y2, class: 'tick' });
-  }
-  [[0, '00:00'], [6, '06:00'], [12, '12:00'], [18, '18:00']].forEach(([h, t]) => {
-    const [x, y] = pt(h, R - 34);
+  const DAY = [
+    [7, 8.5, 'ear', 'Morning commute'],
+    [8.5, 10.5, 'ear', 'Focused work'],
+    [10.5, 12.5, 'busy', 'Meetings'],
+    [12.5, 13, 'ear', 'Lunch walk'],
+    [13, 13.5, 'screen', 'Lunch scroll'],
+    [13.5, 15.5, 'busy', 'Calls'],
+    [15.5, 17.5, 'ear', 'Focused work'],
+    [17.5, 18.5, 'ear', 'Commute home'],
+    [18.5, 19.25, 'ear', 'Gym'],
+    [19.25, 20, 'ear', 'Cooking'],
+    [20, 21, 'busy', 'Dinner'],
+    [21, 22.25, 'screen', 'Evening scroll'],
+    [22.25, 23, 'ear', 'Winding down'],
+  ];
+  const GAP = 0.05; // hours of space between slots
+  let earIndex = 0;
+  DAY.forEach(([from, to, kind, label]) => {
+    const [x1, y1] = pt(from + GAP, R), [x2, y2] = pt(to - GAP, R);
+    const big = to - from - 2 * GAP > SPAN / 2 ? 1 : 0;
+    const seg = mk('path', { d: `M${x1} ${y1} A${R} ${R} 0 ${big} 1 ${x2} ${y2}`, class: `seg ${kind}`, pathLength: 1 });
+    // listening slots light one after another, like the day filling up
+    if (kind === 'ear') seg.style.transitionDelay = `0s, ${(earIndex++ * 0.12).toFixed(2)}s, ${((earIndex - 1) * 0.12).toFixed(2)}s`;
+    const [x, y] = pt((from + to) / 2, R + 30);
+    const anchor = x > C + 12 ? 'start' : x < C - 12 ? 'end' : 'middle';
+    mk('text', { x, y: y + 4, 'text-anchor': anchor, class: `lbl ${kind}` }).textContent = label;
+  });
+  [[7, '07:00'], [11, '11:00'], [15, '15:00'], [19, '19:00']].forEach(([h, t]) => {
+    const [x, y] = pt(h, R - 36);
     mk('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'hr' }).textContent = t;
   });
-  const SEGS = [
-    { from: 7.5, to: 8.7, kind: 'ear', label: 'Commute' },
-    { from: 12.5, to: 13.2, kind: 'screen' },
-    { from: 18, to: 19, kind: 'ear', label: 'Gym' },
-    { from: 19.5, to: 20.4, kind: 'ear', label: 'Cooking' },
-    { from: 21, to: 21.9, kind: 'screen' },
-    { from: 22.6, to: 23.5, kind: 'ear', label: 'Bedtime' },
-  ];
-  SEGS.forEach((s, i) => {
-    const [x1, y1] = pt(s.from, R), [x2, y2] = pt(s.to, R);
-    const seg = mk('path', { d: `M${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}`, class: `seg ${s.kind}`, 'stroke-width': s.kind === 'ear' ? 26 : 14, pathLength: 1 });
-    seg.style.transitionDelay = `${i * 0.12}s`;
-    if (s.label) {
-      const mid = (s.from + s.to) / 2;
-      const [x, y] = pt(mid, R + 44);
-      const anchor = x > C + 20 ? 'start' : x < C - 20 ? 'end' : 'middle';
-      mk('text', { x, y: y + 5, 'text-anchor': anchor, class: 'lbl' }).textContent = s.label;
-    }
-  });
-  new IntersectionObserver(([e]) => { if (e.isIntersecting) dial.classList.add('in'); }, { threshold: 0.35 }).observe(dial);
-  if (reduced) dial.classList.add('in');
+
+  const hours = k => DAY.filter(d => k.includes(d[2])).reduce((n, d) => n + d[1] - d[0], 0);
+  const fmtH = h => { const m = Math.round(h * 60); return m % 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m / 60}h`; };
+  const buttons = [...document.querySelectorAll('.modes button')];
+  let shown = hours(['screen']), raf;
+  function setMode(mode, animate = true) {
+    dial.classList.add('lit-screen');
+    dial.classList.toggle('lit-ear', mode === 'ear');
+    buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === mode));
+    sub.textContent = mode === 'ear' ? 'you can reach them with AudioVibe' : 'you can reach them with video';
+    const target = hours(mode === 'ear' ? ['screen', 'ear'] : ['screen']);
+    cancelAnimationFrame(raf);
+    if (!animate || reduced) { shown = target; num.textContent = fmtH(shown); return; }
+    const from = shown, t0 = performance.now();
+    (function tick(now) {
+      const k = clamp((now - t0) / 1200);
+      shown = from + (target - from) * (1 - Math.pow(1 - k, 3));
+      num.textContent = fmtH(Math.round(shown * 4) / 4);
+      if (k < 1) raf = requestAnimationFrame(tick);
+    })(t0);
+  }
+  buttons.forEach(b => b.addEventListener('click', () => { touched = true; setMode(b.dataset.mode); }));
+  let touched = false;
+  setMode('screen', false);
+  new IntersectionObserver(([e], obs) => {
+    if (!e.isIntersecting) return;
+    obs.disconnect();
+    dial.classList.add('in');
+    // Show video alone first, then let the listening hours fill in.
+    setTimeout(() => { if (!touched) setMode('ear'); }, reduced ? 0 : 2200);
+  }, { threshold: 0.4 }).observe(dial);
 }
 
 /* ---------- Phone tour ---------- */
