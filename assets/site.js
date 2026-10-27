@@ -318,9 +318,24 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
     g.appendChild(el);
     return el;
   };
+  // The waking day runs clockwise from just right of the top round to just left
+  // of it; the gap at the top is the night.
+  const NIGHT = 26; // degrees
+  const deg = h => -90 + NIGHT / 2 + ((h - START) / SPAN) * (360 - NIGHT);
   const pt = (h, r) => {
-    const a = ((h - START) / SPAN) * Math.PI * 2 - Math.PI / 2;
+    const a = (deg(h) * Math.PI) / 180;
     return [C + Math.cos(a) * r, C + Math.sin(a) * r];
+  };
+  const ICONS = {
+    sunrise: '<path d="M3 18h18M7 15a5 5 0 0 1 10 0"/><path d="M12 5v4M9.5 7.5 12 5l2.5 2.5"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
+    sunset: '<path d="M3 18h18M7 15a5 5 0 0 1 10 0"/><path d="M12 4v5M9.5 6.5 12 9l2.5-2.5"/>',
+    moon: '<path d="M19 14.5A7.5 7.5 0 1 1 9.5 5a6 6 0 0 0 9.5 9.5z"/>',
+  };
+  const icon = (name, x, y, size, cls = 'ic') => {
+    const el = mk('g', { class: cls, transform: `translate(${x - size / 2} ${y - size / 2}) scale(${size / 24})` });
+    el.innerHTML = ICONS[name];
+    return el;
   };
   const DAY = [
     [7, 8.5, 'ear', 'Morning commute'],
@@ -341,7 +356,7 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
   let earIndex = 0;
   DAY.forEach(([from, to, kind, label]) => {
     const [x1, y1] = pt(from + GAP, R), [x2, y2] = pt(to - GAP, R);
-    const big = to - from - 2 * GAP > SPAN / 2 ? 1 : 0;
+    const big = deg(to - GAP) - deg(from + GAP) > 180 ? 1 : 0;
     const seg = mk('path', { d: `M${x1} ${y1} A${R} ${R} 0 ${big} 1 ${x2} ${y2}`, class: `seg ${kind}`, pathLength: 1 });
     // listening slots light one after another, like the day filling up
     if (kind === 'ear') seg.style.transitionDelay = `0s, ${(earIndex++ * 0.12).toFixed(2)}s, ${((earIndex - 1) * 0.12).toFixed(2)}s`;
@@ -349,10 +364,19 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
     const anchor = x > C + 12 ? 'start' : x < C - 12 ? 'end' : 'middle';
     mk('text', { x, y: y + 4, 'text-anchor': anchor, class: `lbl ${kind}` }).textContent = label;
   });
-  [[7, '07:00'], [11, '11:00'], [15, '15:00'], [19, '19:00']].forEach(([h, t]) => {
-    const [x, y] = pt(h, R - 36);
-    mk('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'hr' }).textContent = t;
+  // Times of day inside the ring.
+  [[9.6, 'sunrise', 'Morning'], [14.5, 'sun', 'Afternoon'], [18.9, 'sunset', 'Evening'], [21.9, 'moon', 'Night']].forEach(([h, name, word]) => {
+    const [x, y] = pt(h, R - 40);
+    icon(name, x, y - 9, 20);
+    mk('text', { x, y: y + 16, 'text-anchor': 'middle', class: 'ph' }).textContent = word;
   });
+  // Where the day starts and ends: the night gap at the top.
+  icon('moon', C, C - R, 18, 'ic night');
+  const [wx, wy] = pt(START, R + 62), [gx, gy] = pt(START + SPAN, R + 62);
+  icon('sunrise', wx + 10, wy - 5, 20, 'ic edge');
+  mk('text', { x: wx + 26, y: wy, 'text-anchor': 'start', class: 'edge' }).innerHTML = 'Wake up <tspan class="t">07:00</tspan>';
+  icon('moon', gx - 10, gy - 5, 18, 'ic edge');
+  mk('text', { x: gx - 26, y: gy, 'text-anchor': 'end', class: 'edge' }).innerHTML = '<tspan class="t">23:00</tspan> Goodnight';
 
   const hours = k => DAY.filter(d => k.includes(d[2])).reduce((n, d) => n + d[1] - d[0], 0);
   const fmtH = h => { const m = Math.round(h * 60); return m % 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m / 60}h`; };
@@ -362,7 +386,7 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
     dial.classList.add('lit-screen');
     dial.classList.toggle('lit-ear', mode === 'ear');
     buttons.forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === mode));
-    sub.textContent = mode === 'ear' ? 'you can reach them with AudioVibe' : 'you can reach them with video';
+    sub.textContent = mode === 'ear' ? 'with AudioVibe' : 'with video only';
     const target = hours(mode === 'ear' ? ['screen', 'ear'] : ['screen']);
     cancelAnimationFrame(raf);
     if (!animate || reduced) { shown = target; num.textContent = fmtH(shown); return; }
