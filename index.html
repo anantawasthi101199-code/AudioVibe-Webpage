@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AudioVibe: for the hours you can't look at a screen</title>
+  <title>AudioVibe | For the hours you can't look at a screen</title>
   <meta name="description" content="AudioVibe is a feed you listen to. Stories, news, science, comedy and calm, for driving, walking, running, cooking and falling asleep." />
   <link rel="canonical" href="https://audiovibe.co/" />
   <link rel="icon" href="assets/av-icon.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <meta name="theme-color" content="#050a14" />
-  <meta property="og:title" content="AudioVibe: your eyes are busy, your ears are free" />
+  <meta property="og:title" content="AudioVibe | Your eyes are busy. Your ears are free." />
   <meta property="og:description" content="A feed you listen to. Stories, news, science and comedy for the hours you can't look at a screen." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://audiovibe.co/" />
@@ -139,43 +139,19 @@
               mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
     .day-track { display: flex; gap: 2.5rem; width: max-content; will-change: transform; }
     .moment { width: 20rem; flex-shrink: 0; }
-    .scene { aspect-ratio: 240 / 150; border-radius: 24px; border: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, rgba(31,116,236,.16), rgba(8,16,30,.6)); overflow: hidden; transition: border-color .3s; }
+    .scene { aspect-ratio: 3 / 2; border-radius: 24px; border: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, rgba(31,116,236,.16), rgba(8,16,30,.6)); overflow: hidden; transition: border-color .3s; }
     .moment:hover .scene { border-color: rgba(34,211,238,.4); }
-    .scene svg { display: block; width: 100%; height: 100%; fill: none; stroke: url(#sg); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .day:not(.live) .scene svg * { animation-play-state: paused; }
+    .scene { position: relative; }
+    .scene img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+    .moment:hover .scene img { transform: scale(1.1); }
+    .scene::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(5,10,20,.55)); pointer-events: none; }
     .moment time { display: block; margin-top: 20px; font-size: 3.4rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; }
     .moment h3 { font-size: 1.25rem; font-weight: 900; margin: 10px 0 6px; }
     .moment p { color: var(--muted); }
     .day-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 28px; color: var(--muted); font-size: .9rem; }
     .day-foot button { background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; cursor: pointer; color: var(--muted); font-weight: 700; font-size: .85rem; }
+    @media (hover: none) { .hover-hint { visibility: hidden; } }
     .day-foot button:hover { color: var(--text); border-color: rgba(34,211,238,.5); }
-
-    /* scene animations */
-    @keyframes dash { to { stroke-dashoffset: -36; } }
-    @keyframes dashSlow { to { stroke-dashoffset: -60; } }
-    @keyframes steam { 0% { transform: translateY(8px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-22px); opacity: 0; } }
-    @keyframes wag { 50% { transform: rotate(-18deg); } }
-    @keyframes stepA { 50% { transform: rotate(16deg); } }
-    @keyframes stepB { 50% { transform: rotate(-16deg); } }
-    @keyframes twinkle { 50% { opacity: .2; } }
-    @keyframes floatZ { 0% { transform: translate(0,0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(14px,-26px); opacity: 0; } }
-    @keyframes fadeBar { 0%, 15% { transform: scaleY(1); } 85%, 100% { transform: scaleY(.12); } }
-    @keyframes zoom { from { transform: translateX(0); } to { transform: translateX(-60px); } }
-    .s-road { stroke-dasharray: 8 10; animation: dash .6s linear infinite; }
-    .s-ground { stroke-dasharray: 6 12; animation: dashSlow 1.4s linear infinite reverse; }
-    .s-tail { transform-box: fill-box; transform-origin: 100% 100%; animation: wag .5s ease-in-out infinite; }
-    .s-legA { transform-box: fill-box; transform-origin: 50% 0; animation: stepA .6s ease-in-out infinite; }
-    .s-legB { transform-box: fill-box; transform-origin: 50% 0; animation: stepB .6s ease-in-out infinite; }
-    .s-lights { stroke-dasharray: 2 26; stroke-width: 4; animation: dash .35s linear infinite; }
-    .s-ecg { stroke-dasharray: 60 240; animation: dashSlow 1.1s linear infinite; }
-    .s-speed { animation: zoom .5s linear infinite; }
-    .s-steam { animation: steam 2.2s ease-out infinite; }
-    .s-steam.b { animation-delay: .7s; } .s-steam.c { animation-delay: 1.4s; }
-    .s-star { animation: twinkle 2s ease-in-out infinite; }
-    .s-star.b { animation-delay: .6s; } .s-star.c { animation-delay: 1.2s; }
-    .s-z { animation: floatZ 3s ease-out infinite; }
-    .s-z.b { animation-delay: 1.5s; }
-    .s-vol { transform-box: fill-box; transform-origin: 50% 100%; animation: fadeBar 4s ease-in-out infinite alternate; }
 
     /* Join as a creator */
     .creator .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(32px, 6vw, 88px); align-items: center; }
@@ -189,17 +165,38 @@
     .creator h2 { max-width: none; font-size: clamp(2.1rem, 3.2vw, 3.4rem); }
     @media (min-width: 961px) { .creator h2 span { white-space: nowrap; } }
     .creator h2 span { display: block; }
-    @media (max-width: 600px) { .creator .flow text { font-size: 20px; } }
     .fine { color: var(--muted); font-size: .9rem; margin-top: 14px; max-width: 46ch; }
-    .flow { width: 100%; height: auto; overflow: visible; }
-    .flow text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; fill: var(--text); }
-    .flow .sub { font-weight: 700; font-size: 12px; fill: var(--muted); }
-    .flow .chip { fill: rgba(16,28,50,.75); stroke: rgba(120,170,255,.22); }
-    .flow .path { fill: none; stroke: rgba(120,170,255,.18); stroke-width: 1.5; }
-    .flow .dot { fill: var(--cyan); filter: drop-shadow(0 0 6px #22d3ee); }
-    .flow .ripple { fill: none; stroke: #2b8fff; transform-box: fill-box; transform-origin: center; animation: ripple 3s ease-out infinite; }
-    .flow .ripple.b { animation-delay: 1s; } .flow .ripple.c { animation-delay: 2s; }
-    @keyframes ripple { from { transform: scale(.6); opacity: .8; } to { transform: scale(1.9); opacity: 0; } }
+    .dial-wrap { display: grid; justify-items: center; gap: 18px; }
+    .dial { width: min(100%, 460px); height: auto; overflow: visible; }
+    .dial text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; fill: var(--text); }
+    .dial .hr { font-size: 12px; font-weight: 700; fill: var(--muted); }
+    .dial .ctr { font-size: 15px; fill: var(--muted); font-weight: 700; }
+    .dial .track { fill: none; stroke: rgba(120,170,255,.08); }
+    .dial .tick { stroke: rgba(120,170,255,.22); stroke-width: 1.5; }
+    .dial .seg { fill: none; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s cubic-bezier(.3,.7,.2,1); }
+    .dial .seg.screen { stroke: rgba(238,244,255,.45); }
+    .dial .seg.ear { stroke: url(#dg); filter: drop-shadow(0 0 8px rgba(34,211,238,.45)); }
+    .dial.in .seg { stroke-dashoffset: 0; }
+    .dial .lbl { opacity: 0; transition: opacity .6s .9s; }
+    .dial.in .lbl { opacity: 1; }
+    .dial .hand { transform-origin: 220px 220px; animation: hand 24s linear infinite; }
+    .dial .hand line { stroke: rgba(238,244,255,.35); stroke-width: 1.5; }
+    .dial .hand circle { fill: var(--cyan); filter: drop-shadow(0 0 6px #22d3ee); }
+    @keyframes hand { to { transform: rotate(360deg); } }
+    .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 24px; color: var(--muted); font-size: .92rem; list-style: none; }
+    .legend li { display: flex; align-items: center; gap: 10px; }
+    .legend i { width: 22px; height: 6px; border-radius: 6px; background: rgba(238,244,255,.45); }
+    .legend .ear i { background: var(--grad); box-shadow: 0 0 10px rgba(34,211,238,.5); }
+
+    /* Quiet texture so the lower sections are not flat */
+    body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image: radial-gradient(rgba(120,170,255,.10) 1px, transparent 1.3px); background-size: 30px 30px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 80%);
+              mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 80%); }
+    .creator, .tour { position: relative; }
+    .creator::before, .tour::before { content: ''; position: absolute; pointer-events: none; z-index: -1; border-radius: 50%; filter: blur(40px); }
+    .creator::before { width: 640px; height: 640px; right: -120px; top: 10%; background: radial-gradient(closest-side, rgba(31,116,236,.18), transparent); }
+    .tour::before { width: 900px; height: 900px; left: -300px; top: 20%; background: radial-gradient(closest-side, rgba(34,211,238,.10), transparent); }
 
     /* Phone tour */
     .tour .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -210,7 +207,18 @@
     .step p { color: var(--muted); font-size: 1.12rem; margin-top: 14px; }
     .stage { position: sticky; top: 0; height: 100svh; padding-top: 72px; display: grid; place-items: center; perspective: 1400px; }
     .stage::before { content: ''; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(31,116,236,.35), transparent 65%); filter: blur(20px); }
-    .tilt { transform-style: preserve-3d; transition: transform .25s ease-out; }
+    .tilt { position: relative; transform-style: preserve-3d; transition: transform .25s ease-out; }
+    .stage::after { content: ''; position: absolute; width: min(560px, 46vw); aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(120,170,255,.08); box-shadow: 0 0 0 60px rgba(120,170,255,.02), 0 0 0 120px rgba(120,170,255,.015); pointer-events: none; }
+    .float { position: absolute; display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 12px; border-radius: 18px; width: max-content; max-width: 250px;
+      background: rgba(12,24,44,.78); border: 1px solid rgba(120,170,255,.22); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 24px 50px -20px #000; transition: opacity .4s, translate .4s; }
+    .float.a { left: 74%; top: 16%; transform: translateZ(70px); }
+    .float.b { right: 74%; bottom: 14%; transform: translateZ(50px); }
+    .float.out { opacity: 0; translate: 0 10px; }
+    .float .fi { width: 40px; height: 40px; border-radius: 12px; background: var(--grad); display: grid; place-items: center; flex-shrink: 0; }
+    .float .fi svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .float b { display: block; font-weight: 900; font-size: .95rem; line-height: 1.2; }
+    .float div span { display: block; color: var(--muted); font-size: .8rem; line-height: 1.3; margin-top: 2px; }
     .phone { --w: min(300px, 40vw, (100svh - 120px) * .46); --t: 14px; position: relative; width: var(--w); aspect-ratio: 1440 / 3120; transform-style: preserve-3d; }
     .phone .face { position: absolute; inset: 0; border-radius: calc(var(--w) * .13); backface-visibility: hidden; }
     .phone .front { background: #000; border: 7px solid #10151f; overflow: hidden; transform: translateZ(calc(var(--t) / 2)); box-shadow: 0 0 0 1px rgba(120,170,255,.25), 0 40px 120px -30px rgba(43,143,255,.55); }
@@ -282,6 +290,7 @@
       .phone { --w: min(160px, 36vw, (56svh - 80px) * .46); }
       .tour-intro { min-height: 40vh; }
       .step { min-height: 62vh; }
+      .float, .stage::after { display: none; }
     }
     @media (max-height: 560px) {
       .step { min-height: 80vh; }
@@ -298,7 +307,6 @@
   </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="sg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="240" y2="150"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#2b8fff"/></linearGradient></defs></svg>
 
 <nav id="nav">
   <div class="wrap nav-in">
@@ -368,73 +376,39 @@
 
   <section class="day" id="day">
     <div class="wrap">
-      <h2>Press play, keep moving</h2>
+      <h2>Press play. Keep moving.</h2>
       <p class="lede">Driving, walking, running, cooking, falling asleep. AudioVibe plays through the parts of the day when your eyes are busy.</p>
     </div>
     <div class="marquee">
       <div class="day-track" id="day-track">
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <circle cx="192" cy="40" r="10"/><path d="M186 22v-6M206 34h6M200 26l4-4"/>
-            <path d="M20 72h200"/><path d="M38 150 104 72M202 150 136 72"/>
-            <path class="s-road" d="M120 74V150"/>
-            <path d="M58 150a62 62 0 0 1 124 0"/><path d="M78 150a42 42 0 0 1 84 0"/><path d="M120 108v18M86 140l20-8M154 140l-20-8"/>
-          </svg></div>
+          <div class="scene"><img src="assets/day/drive.webp" alt="" width="960" height="640" loading="lazy" /></div>
           <time>07:40</time><h3>Driving in</h3><p>The world's news in under two minutes, from The Global Thread.</p>
         </article>
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <path class="s-ground" d="M10 126h220"/>
-            <circle cx="208" cy="34" r="6"/><path d="M205 40C190 70 168 80 146 88"/>
-            <ellipse cx="108" cy="96" rx="34" ry="12"/>
-            <path d="M138 90c4-10 10-14 18-12 6 2 9 8 6 13-2 4-8 5-14 4"/><path d="M146 78l-3-12 9 9"/>
-            <path class="s-tail" d="M75 92c-10-6-12-14-8-22"/>
-            <path class="s-legA" d="M84 104v20"/><path class="s-legB" d="M96 106v18"/><path class="s-legB" d="M122 106v18"/><path class="s-legA" d="M132 103v21"/>
-          </svg></div>
+          <div class="scene"><img src="assets/day/walk.webp" alt="" width="960" height="640" loading="lazy" /></div>
           <time>12:30</time><h3>Walking the dog</h3><p>Autoscroll moves the feed on by itself. One tap at the door is the only tap.</p>
         </article>
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <path d="M16 140V78a104 58 0 0 1 208 0v62"/>
-            <path class="s-lights" d="M30 76a92 48 0 0 1 180 0"/>
-            <rect x="44" y="84" width="152" height="48" rx="12"/>
-            <rect x="58" y="94" width="30" height="18" rx="4"/><rect x="104" y="94" width="30" height="18" rx="4"/><rect x="150" y="94" width="30" height="18" rx="4"/>
-            <path d="M44 140h152"/>
-            <path d="M196 20v12M204 14v18M212 8v24M190 6l28 30" stroke-width="2"/>
-          </svg></div>
+          <div class="scene"><img src="assets/day/underground.webp" alt="" width="960" height="640" loading="lazy" /></div>
           <time>15:05</time><h3>Underground, no signal</h3><p>Downloads keep playing offline. Sort them into folders for the commute, the run and bedtime.</p>
         </article>
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <path class="s-ecg" d="M20 46h60l8-16 10 32 8-24 6 8h108"/>
-            <path d="M70 124v-20c0-8 4-12 12-12l26 4c12 2 24 8 34 14l46 4c10 1 16 6 16 12v4H70z"/>
-            <path d="M70 124h134M104 98l6 10M116 100l6 10M128 104l6 8"/>
-            <g class="s-speed"><path d="M20 100h30M30 112h28M14 88h24M80 100h30M90 112h28"/></g>
-          </svg></div>
-          <time>18:15</time><h3>On a run</h3><p>Lock screen and headphone controls. Skip back ten seconds without breaking stride.</p>
+          <div class="scene"><img src="assets/day/run.webp" alt="" width="960" height="640" loading="lazy" /></div>
+          <time>18:15</time><h3>On a run</h3><p>Skip back ten seconds from the lock screen or your headphones, without breaking stride.</p>
         </article>
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <path class="s-steam" d="M96 72c-6-8 6-12 0-20"/><path class="s-steam b" d="M116 70c-6-8 6-12 0-20"/><path class="s-steam c" d="M136 72c-6-8 6-12 0-20"/>
-            <path d="M60 92h112v10c0 10-6 16-16 16H76c-10 0-16-6-16-16z"/><path d="M172 96l50-8"/>
-            <path d="M40 132h160"/><path d="M90 132c0-6 6-8 6-14M116 132c0-6 6-8 6-14M142 132c0-6 6-8 6-14" stroke-width="2"/>
-          </svg></div>
+          <div class="scene"><img src="assets/day/cook.webp" alt="" width="960" height="640" loading="lazy" /></div>
           <time>19:40</time><h3>Cooking</h3><p>A series moves to the next episode on its own and remembers exactly where you stopped.</p>
         </article>
         <article class="moment">
-          <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
-            <path d="M88 30a34 34 0 1 0 30 52 28 28 0 1 1-30-52z"/>
-            <path class="s-star" d="M170 30v10M165 35h10"/><path class="s-star b" d="M206 58v8M202 62h8"/><path class="s-star c" d="M146 64v6M143 67h6"/>
-            <path class="s-z" d="M126 100h10l-10 10h10"/><path class="s-z b" d="M140 92h8l-8 8h8"/>
-            <path d="M24 130h192"/>
-            <path class="s-vol" d="M162 126v-34"/><path class="s-vol" d="M176 126v-26" style="animation-delay:.2s"/><path class="s-vol" d="M190 126v-18" style="animation-delay:.4s"/><path class="s-vol" d="M204 126v-10" style="animation-delay:.6s"/>
-          </svg></div>
+          <div class="scene"><img src="assets/day/sleep.webp" alt="" width="960" height="640" loading="lazy" /></div>
           <time>23:10</time><h3>Lights out</h3><p>Set the sleep timer. It fades out and stops, so you don't have to reach for the phone.</p>
         </article>
       </div>
     </div>
     <div class="wrap day-foot">
-      <span>Hover to slow it down.</span>
+      <span class="hover-hint">Hover over a card to slow it down.</span>
       <button type="button" id="day-toggle" aria-pressed="false">Pause</button>
     </div>
   </section>
@@ -442,27 +416,34 @@
   <section class="creator" id="creators">
     <div class="wrap">
       <div>
-        <h2><span>Bring your audience</span> <span>with you</span></h2>
-        <p class="lede">Your audience already knows your face, your voice and what you make. On AudioVibe they can keep listening to you on the drive, the run and the walk home, everywhere their eyes can't follow.</p>
+        <h2><span>Your fans, on the go</span></h2>
+        <p class="lede">You've built an audience that knows your face, your voice and what you make. AudioVibe gives your work a second home, built for the hours they can't watch a screen: the commute, the gym, the kitchen and the walk home.</p>
         <ul class="perks">
+          <li><span class="pi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <div><h3>Win the hours a screen can't</h3><p>Your fans spend hours every day driving, training and cooking. Give them an audio version of what you make, and you're part of those hours too.</p></div></li>
           <li><span class="pi"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
-            <div><h3>One link for your followers</h3><p>Share your profile or a series anywhere you already post. It unfurls into a preview card and opens straight in the app.</p></div></li>
+            <div><h3>Bring them over with one link</h3><p>Share your profile wherever you already post. It shows a preview card and opens straight in the app.</p></div></li>
           <li><span class="pi"><svg viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h8"/><path d="M17 15l4 3-4 3z"/></svg></span>
-            <div><h3>Episodes that carry on by themselves</h3><p>Group your episodes into a series. Followers move on to the next one automatically and hear when a new one lands.</p></div></li>
-          <li><span class="pi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
-            <div><h3>A page that plays in any browser</h3><p>Your public profile plays your work on the web, so someone without the app can still hear you first.</p></div></li>
+            <div><h3>Series that bring them back</h3><p>Group episodes into a series. Followers move on to the next one by themselves and hear the moment a new one lands.</p></div></li>
         </ul>
         <div class="actions">
           <a class="pill" href="mailto:generalinquiries@audiovibe.co?subject=Creator%20invite%20request&amp;body=Where%20my%20audience%20is%20today%3A%0AWhat%20I%27d%20make%20on%20AudioVibe%3A">Request a creator invite</a>
         </div>
         <p class="fine">Creator accounts open with an invite code. Tell us where your audience is today and what you'd like to make.</p>
       </div>
-      <svg class="flow" id="flow" viewBox="0 0 560 400" role="img" aria-label="Your audience from other platforms listening to you on AudioVibe while driving, running, cooking and falling asleep">
-        <g id="flow-paths"></g>
-        <circle class="ripple" cx="280" cy="200" r="46"/><circle class="ripple b" cx="280" cy="200" r="46"/><circle class="ripple c" cx="280" cy="200" r="46"/>
-        <image href="assets/av-icon.png" x="240" y="160" width="80" height="80" clip-path="inset(0 round 18px)"/>
-        <g id="flow-chips"></g>
-      </svg>
+      <div class="dial-wrap">
+        <svg class="dial" id="dial" viewBox="0 0 440 440" role="img" aria-label="A fan's day on a 24-hour clock. A little of it is screen time, where your other channels reach them. The commute, the gym, cooking and bedtime are listening time, where AudioVibe reaches them.">
+          <defs><linearGradient id="dg" gradientUnits="userSpaceOnUse" x1="60" y1="60" x2="380" y2="380"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#1f74ec"/></linearGradient></defs>
+          <g id="dial-g"></g>
+          <g class="hand"><line x1="220" y1="220" x2="220" y2="96"/><circle cx="220" cy="96" r="4"/></g>
+          <image href="assets/av-icon.png" x="188" y="172" width="64" height="64" clip-path="inset(0 round 15px)"/>
+          <text class="ctr" x="220" y="262" text-anchor="middle">A fan's day</text>
+        </svg>
+        <ul class="legend">
+          <li><i></i>Screen time, where you reach them now</li>
+          <li class="ear"><i></i>Listening time, where AudioVibe reaches them</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -471,13 +452,13 @@
       <div class="tour-steps">
         <div class="tour-intro">
           <h2>Built to be heard, not stared at</h2>
-          <p class="lede">These are real screens from the app. Scroll through, and move your cursor over the phone.</p>
+          <p class="lede">These are real screens from the app. Keep scrolling to move through them.</p>
         </div>
         <div class="step" data-shot="for-you"><h3>A feed you listen to</h3><p>For You plays one thing after another and learns from what you actually finish. Put the phone in your pocket and it keeps going.</p></div>
         <div class="step" data-shot="now-playing"><h3>Controls where your hands are</h3><p>Pause, skip and jump back ten seconds from the lock screen, the notification shade or your headphones.</p></div>
         <div class="step" data-shot="series-detail"><h3>Series that keep going</h3><p>Follow a series and it moves on to the next episode by itself, then tells you when a new one lands.</p></div>
-        <div class="step" data-shot="discover-rails"><h3>Pick a lane</h3><p>Stories, news, comedy, science and tech, health, history. Browse by category instead of taking whatever comes next.</p></div>
-        <div class="step" data-shot="sleep-timer"><h3>Falls asleep with you</h3><p>Choose a time, or the end of the episode. The audio fades out and stops on its own.</p></div>
+        <div class="step" data-shot="discover-rails"><h3>Pick a lane</h3><p>Stories, news, comedy, science, tech, health and history. Browse by category instead of taking whatever comes next.</p></div>
+        <div class="step" data-shot="sleep-timer"><h3>Falls asleep with you</h3><p>Choose a time or the end of the episode. The audio fades out and stops on its own.</p></div>
         <div class="step" data-shot="creator-profile">
           <h3>Every voice has a home</h3>
           <p>Follow a creator and their new work rises to the top of your feed instead of getting buried.</p>
@@ -495,6 +476,8 @@
             <div class="face back"><img class="icon-tile" src="assets/av-icon.png" alt="" /></div>
             <div class="edge l"></div><div class="edge r"></div>
           </div>
+          <div class="float a" id="float-a"><span class="fi"></span><div><b></b><span></span></div></div>
+          <div class="float b" id="float-b"><span class="fi"></span><div><b></b><span></span></div></div>
         </div>
       </div>
     </div>

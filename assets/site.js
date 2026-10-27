@@ -302,38 +302,53 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
   }
 }
 
-/* ---------- Creator flow diagram ---------- */
+/* ---------- A fan's day: 24-hour dial ---------- */
 {
   const NS = 'http://www.w3.org/2000/svg';
-  const mk = (tag, attrs, parent) => {
+  const g = document.getElementById('dial-g');
+  const dial = document.getElementById('dial');
+  const C = 220, R = 150;
+  const mk = (tag, attrs) => {
     const el = document.createElementNS(NS, tag);
     for (const k in attrs) el.setAttribute(k, attrs[k]);
-    parent.appendChild(el);
+    g.appendChild(el);
     return el;
   };
-  const pathsG = document.getElementById('flow-paths');
-  const chipsG = document.getElementById('flow-chips');
-  const ys = [56, 152, 248, 344];
-  const from = ['YouTube', 'Instagram', 'TikTok', 'Podcasts'];
-  const to = ['On the drive', 'On a run', 'In the kitchen', 'Falling asleep'];
-  const W = 150;
-  ys.forEach((y, i) => {
-    const left = `M${W} ${y} C ${W + 60} ${y}, 200 200, 236 200`;
-    const right = `M324 200 C 360 200, ${560 - W - 60} ${y}, ${560 - W} ${y}`;
-    mk('path', { d: left, class: 'path' }, pathsG);
-    mk('path', { d: right, class: 'path' }, pathsG);
-    if (!reduced) {
-      [[left, i * 0.6], [right, 1.2 + i * 0.6]].forEach(([d, begin]) => {
-        const dot = mk('circle', { r: 3.5, class: 'dot', opacity: 0 }, pathsG);
-        mk('animateMotion', { path: d, dur: '1.8s', begin: `${begin}s`, repeatCount: 'indefinite' }, dot);
-        mk('animate', { attributeName: 'opacity', values: '0;1;1;0', dur: '1.8s', begin: `${begin}s`, repeatCount: 'indefinite' }, dot);
-      });
-    }
-    [[0, from[i]], [560 - W, to[i]]].forEach(([x, label]) => {
-      mk('rect', { x, y: y - 22, width: W, height: 44, rx: 22, class: 'chip' }, chipsG);
-      mk('text', { x: x + W / 2, y: y + 5, 'text-anchor': 'middle' }, chipsG).textContent = label;
-    });
+  // Midnight at the top, clockwise.
+  const pt = (h, r) => {
+    const a = (h / 24) * Math.PI * 2 - Math.PI / 2;
+    return [C + Math.cos(a) * r, C + Math.sin(a) * r];
+  };
+  mk('circle', { cx: C, cy: C, r: R, class: 'track', 'stroke-width': 26 });
+  for (let h = 0; h < 24; h += 3) {
+    const [x1, y1] = pt(h, R + 18), [x2, y2] = pt(h, R + 24);
+    mk('line', { x1, y1, x2, y2, class: 'tick' });
+  }
+  [[0, '00:00'], [6, '06:00'], [12, '12:00'], [18, '18:00']].forEach(([h, t]) => {
+    const [x, y] = pt(h, R - 34);
+    mk('text', { x, y: y + 4, 'text-anchor': 'middle', class: 'hr' }).textContent = t;
   });
+  const SEGS = [
+    { from: 7.5, to: 8.7, kind: 'ear', label: 'Commute' },
+    { from: 12.5, to: 13.2, kind: 'screen' },
+    { from: 18, to: 19, kind: 'ear', label: 'Gym' },
+    { from: 19.5, to: 20.4, kind: 'ear', label: 'Cooking' },
+    { from: 21, to: 21.9, kind: 'screen' },
+    { from: 22.6, to: 23.5, kind: 'ear', label: 'Bedtime' },
+  ];
+  SEGS.forEach((s, i) => {
+    const [x1, y1] = pt(s.from, R), [x2, y2] = pt(s.to, R);
+    const seg = mk('path', { d: `M${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}`, class: `seg ${s.kind}`, 'stroke-width': s.kind === 'ear' ? 26 : 14, pathLength: 1 });
+    seg.style.transitionDelay = `${i * 0.12}s`;
+    if (s.label) {
+      const mid = (s.from + s.to) / 2;
+      const [x, y] = pt(mid, R + 44);
+      const anchor = x > C + 20 ? 'start' : x < C - 20 ? 'end' : 'middle';
+      mk('text', { x, y: y + 5, 'text-anchor': anchor, class: 'lbl' }).textContent = s.label;
+    }
+  });
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) dial.classList.add('in'); }, { threshold: 0.35 }).observe(dial);
+  if (reduced) dial.classList.add('in');
 }
 
 /* ---------- Phone tour ---------- */
@@ -347,10 +362,44 @@ let currentShot = 'for-you', spin, swapTimer;
 const pointer = { x: 0, y: 0 };
 let scrollTurn = 0;
 
+// The two glass cards beside the phone change with each step.
+const ICON = {
+  auto: '<path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/>',
+  heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  back: '<path d="M4 12a8 8 0 1 0 2.3-5.6L4 8.7"/><path d="M4 4v4.7h4.7"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  next: '<path d="M5 5l10 7-10 7zM19 5v14"/>',
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+  moon: '<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>',
+  fade: '<path d="M4 18V14M9 18V10M14 18V7M19 18V4"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+};
+const FLOATS = {
+  'for-you': [['auto', 'Autoscroll is on', 'The next one starts by itself'], ['heart', 'Learns what you finish', 'Not just what you tap']],
+  'now-playing': [['back', 'Back 10 seconds', 'Missed a line? Tap once'], ['lock', 'Lock screen controls', 'No need to unlock']],
+  'series-detail': [['next', 'Up next: Episode 3', 'Starts when this one ends'], ['bell', 'New episode out', 'From a series you follow']],
+  'discover-rails': [['grid', 'Pick a category', 'Stories, news, science'], ['star', 'Featured', 'A fresh pick on Discover']],
+  'sleep-timer': [['moon', 'Stops in 30:00', 'Or at the end of the episode'], ['fade', 'Fades out gently', 'No sudden silence']],
+  'creator-profile': [['user', 'Following', 'Their new work comes first'], ['bell', 'New from Business Decoded', 'Uber: The Taxi Company With No Taxis']],
+};
+const floats = ['float-a', 'float-b'].map(id => document.getElementById(id));
+function setFloats(name) {
+  FLOATS[name].forEach(([icon, title, sub], i) => {
+    const f = floats[i];
+    f.querySelector('.fi').innerHTML = `<svg viewBox="0 0 24 24">${ICON[icon]}</svg>`;
+    f.querySelector('b').textContent = title;
+    f.querySelector(':scope > div > span').textContent = sub;
+  });
+}
+setFloats('for-you');
+
 function showShot(name) {
   if (name === currentShot) return;
   currentShot = name;
-  const swap = () => { shot.src = `assets/shots/${name}.webp`; };
+  floats.forEach(f => f.classList.add('out'));
+  const swap = () => { shot.src = `assets/shots/${name}.webp`; setFloats(name); floats.forEach(f => f.classList.remove('out')); };
   if (reduced) return swap();
   spin?.cancel(); clearTimeout(swapTimer);
   spin = phone.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(360deg)' }],
