@@ -265,9 +265,11 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
 
 /* ---------- Press play, keep moving: a self-moving strip ---------- */
 // Moves on its own like a billboard. Scrolling past it never stops; a scroll
-// only gives it a brief push in the same direction.
+// only gives it a brief push. It can also be dragged or flicked sideways by
+// hand (mouse or finger); a flick carries on and eases back to the base speed.
 {
   const day = document.getElementById('day');
+  const marquee = day.querySelector('.marquee');
   const dayTrack = document.getElementById('day-track');
   const toggle = document.getElementById('day-toggle');
   [...dayTrack.children].forEach(m => {
@@ -276,9 +278,33 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
     dayTrack.appendChild(c);
   });
   let x = 0, speed = 0, paused = false, slow = false, visible = false, running = false, last = 0, lastY = scrollY;
-  const BASE = 42; // px per second
-  dayTrack.addEventListener('pointerenter', () => { slow = true; });
-  dayTrack.addEventListener('pointerleave', () => { slow = false; });
+  let drag = null; // { id, lastX, lastT, vel }
+  const base = () => (innerWidth < 600 ? 70 : 48); // px per second; phones get more, cards are a bigger share of the screen
+  const wrap = v => { const half = dayTrack.scrollWidth / 2; return ((v % half) + half) % half; };
+  const paint = () => { dayTrack.style.transform = `translate3d(${-x}px,0,0)`; };
+
+  marquee.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') slow = true; });
+  marquee.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') slow = false; });
+  marquee.addEventListener('pointerdown', e => {
+    drag = { id: e.pointerId, startX: e.clientX, lastX: e.clientX, lastT: performance.now(), vel: 0, moved: false };
+  });
+  marquee.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const now = performance.now(), dx = e.clientX - drag.lastX;
+    if (!drag.moved && Math.abs(e.clientX - drag.startX) > 6) { drag.moved = true; marquee.setPointerCapture(e.pointerId); }
+    if (!drag.moved) return;
+    x = wrap(x - dx); paint();
+    drag.vel = lerp(drag.vel, (-dx / Math.max(now - drag.lastT, 1)) * 1000, 0.5);
+    drag.lastX = e.clientX; drag.lastT = now;
+  });
+  const endDrag = e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.moved) speed = Math.max(-2500, Math.min(2500, drag.vel)); // the flick carries on
+    drag = null;
+  };
+  marquee.addEventListener('pointerup', endDrag);
+  marquee.addEventListener('pointercancel', endDrag);
+
   toggle.addEventListener('click', () => {
     paused = !paused;
     toggle.textContent = paused ? 'Play' : 'Pause';
@@ -293,11 +319,13 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
     if (!visible) { running = false; return; }
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
     const dy = scrollY - lastY; lastY = scrollY;
-    const target = paused ? 0 : BASE * (slow ? 0.2 : 1) + Math.min(Math.abs(dy) * 30, 600);
-    speed = lerp(speed, target, 0.08);
-    const half = dayTrack.scrollWidth / 2;
-    x = (x + speed * dt) % half;
-    dayTrack.style.transform = `translate3d(${-x}px,0,0)`;
+    if (!drag) {
+      const target = paused ? 0 : base() * (slow ? 0.2 : 1) + Math.min(Math.abs(dy) * 30, 600);
+      // a flick (big speed either way) eases out slowly; normal changes ease quickly
+      speed = lerp(speed, target, Math.abs(speed - target) > 400 ? 0.035 : 0.08);
+      x = wrap(x + speed * dt);
+      paint();
+    }
     requestAnimationFrame(step);
   }
 }
