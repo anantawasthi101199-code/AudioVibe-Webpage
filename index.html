@@ -305,6 +305,39 @@
       .step { min-height: 80vh; }
       .step h3 { font-size: 1.6rem; }
     }
+    /* Creator application dialog */
+    .apply { margin: auto; width: min(520px, calc(100vw - 24px)); max-height: calc(100svh - 24px); padding: 0; border: 1px solid rgba(120,170,255,.22); border-radius: 28px;
+      background: linear-gradient(160deg, #0e1a30, #070d18); color: var(--text); box-shadow: 0 40px 120px -30px #000, 0 0 80px -40px rgba(43,143,255,.6); overflow: auto; }
+    .apply::backdrop { background: rgba(3,6,12,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .apply[open] { animation: popIn .35s cubic-bezier(.2,.8,.2,1); }
+    @keyframes popIn { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+    .apply form, .apply .done { padding: 28px 28px 24px; }
+    .apply-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
+    .apply h3 { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.15; }
+    .apply .sub { color: var(--muted); font-size: .95rem; margin-top: 6px; }
+    .apply .x { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.04); display: grid; place-items: center; cursor: pointer; color: var(--muted); }
+    .apply .x:hover { color: var(--text); }
+    .apply .x svg { width: 16px; height: 16px; }
+    .apply label { display: block; font-weight: 800; font-size: .9rem; margin: 20px 0 8px; }
+    .apply label small { font-weight: 600; color: var(--muted); font-size: .85rem; }
+    .apply .hint { color: var(--muted); font-size: .82rem; margin: -2px 0 8px; }
+    .apply input { width: 100%; font: 600 1rem 'Nunito', sans-serif; color: var(--text); background: rgba(255,255,255,.04); border: 1px solid rgba(120,170,255,.18); border-radius: 14px; padding: 12px 14px; outline: none; transition: border-color .2s, background .2s; }
+    .apply input::placeholder { color: rgba(142,163,194,.6); }
+    .apply input:focus { border-color: var(--cyan); background: rgba(34,211,238,.05); }
+    .apply .link-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .apply .link-row button { flex-shrink: 0; width: 44px; border-radius: 14px; border: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; }
+    .apply .add { border: 0; background: none; color: var(--cyan); font-weight: 800; cursor: pointer; padding: 4px 0; font-size: .9rem; }
+    .apply [hidden] { display: none !important; }
+    .apply .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .apply .err { color: #ff8a8a; font-size: .9rem; margin-top: 16px; min-height: 1.2em; }
+    .apply .send { width: 100%; margin-top: 12px; }
+    .apply .send[disabled] { opacity: .6; cursor: wait; transform: none; }
+    .apply .done { text-align: center; display: grid; justify-items: center; gap: 12px; padding-top: 40px; padding-bottom: 32px; }
+    .apply .tick { width: 64px; height: 64px; border-radius: 50%; background: var(--grad); display: grid; place-items: center; box-shadow: 0 10px 40px -10px rgba(43,143,255,.8); }
+    .apply .tick svg { width: 30px; height: 30px; }
+    .apply .ref { font-weight: 900; font-size: 1.1rem; letter-spacing: .04em; padding: 8px 16px; border-radius: 12px; border: 1px dashed rgba(120,170,255,.4); }
+    .apply .done p { color: var(--muted); max-width: 36ch; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; }
       .reveal { opacity: 1; transform: none; }
@@ -436,9 +469,9 @@
             <div><h3>Series that bring them back</h3><p>Group episodes into a series. Followers move on to the next one by themselves and hear the moment a new one lands.</p></div></li>
         </ul>
         <div class="actions">
-          <a class="pill" href="mailto:generalinquiries@audiovibe.co?subject=Creator%20invite%20request&amp;body=Where%20my%20audience%20is%20today%3A%0AWhat%20I%27d%20make%20on%20AudioVibe%3A">Request a creator invite</a>
+          <button type="button" class="pill" id="open-apply">Apply to be a creator</button>
         </div>
-        <p class="fine">Creator accounts open with an invite code. Tell us where your audience is today and what you'd like to make.</p>
+        <p class="fine">Creator accounts open with an invite code. Tell us where your audience is today and we'll be in touch.</p>
       </div>
       <div class="dial-wrap">
         <svg class="dial" id="dial" viewBox="-70 -20 580 480" role="img" aria-label="An example weekday on a 24-hour clock, with sleep from 23:00 to 07:00 at the top. Watching video, a fan has about 1 hour 45 minutes of screen time. Add listening while commuting, working, at the gym, cooking and winding down, and you can reach them for about 11 hours.">
@@ -565,6 +598,39 @@
     </button>
   </div>
 </div>
+
+<dialog class="apply" id="apply" aria-labelledby="apply-title">
+  <form id="apply-form" novalidate>
+    <div class="apply-head">
+      <div>
+        <h3 id="apply-title">Apply to be a creator</h3>
+        <p class="sub">Tell us who you are and where your audience listens today.</p>
+      </div>
+      <button type="button" class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <label for="ap-name">Your name</label>
+    <input id="ap-name" name="name" autocomplete="name" maxlength="100" placeholder="Your full name" required />
+    <label for="ap-link-0">Your social media</label>
+    <p class="hint">Links to where people already follow you: Instagram, YouTube, TikTok, a podcast. Up to five.</p>
+    <div id="ap-links"></div>
+    <button type="button" class="add" id="ap-add">Add another link</button>
+    <label for="ap-email">Email</label>
+    <input id="ap-email" name="email" type="email" autocomplete="email" maxlength="255" placeholder="you@example.com" required />
+    <label for="ap-phone">Phone <small>(optional)</small></label>
+    <input id="ap-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+44 7700 900000" />
+    <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <p class="err" id="ap-err" role="alert"></p>
+    <button type="submit" class="pill send" id="ap-send">Apply</button>
+  </form>
+  <div class="done" id="apply-done" hidden>
+    <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h3>Application sent</h3>
+    <p>We read every one. If you're in this round, we'll email your invite code to <strong id="ap-done-email"></strong>.</p>
+    <span class="ref" id="ap-ref"></span>
+    <p>Keep this reference in case you need to contact us.</p>
+    <button type="button" class="pill ghost" data-close>Done</button>
+  </div>
+</dialog>
 
 <audio id="sample" preload="metadata"></audio>
 

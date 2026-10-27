@@ -391,6 +391,93 @@ new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock()
   }, { threshold: 0.4 }).observe(dial);
 }
 
+/* ---------- Apply to be a creator ---------- */
+// Same request the app's signup sheet sends, tagged as from the website.
+{
+  const API = 'https://api.audiovibe.co/api/auth/creator-code/request';
+  const MAX_LINKS = 5;
+  const dlg = document.getElementById('apply');
+  const form = document.getElementById('apply-form');
+  const done = document.getElementById('apply-done');
+  const linksBox = document.getElementById('ap-links');
+  const addBtn = document.getElementById('ap-add');
+  const err = document.getElementById('ap-err');
+  const send = document.getElementById('ap-send');
+
+  function addLink(value = '') {
+    const i = linksBox.children.length;
+    const row = document.createElement('div');
+    row.className = 'link-row';
+    row.innerHTML = `<input id="ap-link-${i}" type="url" inputmode="url" autocapitalize="off" autocomplete="off" maxlength="300" placeholder="${i ? 'youtube.com/@yourname' : 'instagram.com/yourname'}" aria-label="Social link ${i + 1}">`;
+    row.querySelector('input').value = value;
+    if (i) {
+      const rm = document.createElement('button');
+      rm.type = 'button'; rm.textContent = '\u2212'; rm.setAttribute('aria-label', 'Remove this link');
+      rm.addEventListener('click', () => { row.remove(); addBtn.hidden = false; });
+      row.appendChild(rm);
+    }
+    linksBox.appendChild(row);
+    addBtn.hidden = linksBox.children.length >= MAX_LINKS;
+    return row.querySelector('input');
+  }
+  addBtn.addEventListener('click', () => addLink().focus());
+
+  function reset() {
+    form.reset(); linksBox.innerHTML = ''; addLink();
+    err.textContent = ''; form.hidden = false; done.hidden = true;
+  }
+  document.getElementById('open-apply').addEventListener('click', () => {
+    reset();
+    dlg.showModal();
+    lenis?.stop();
+    document.getElementById('ap-name').focus();
+  });
+  dlg.addEventListener('close', () => lenis?.start());
+  dlg.addEventListener('click', e => {
+    if (e.target.closest('[data-close]') || e.target === dlg) dlg.close();
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    err.textContent = '';
+    const data = new FormData(form);
+    const name = (data.get('name') || '').trim();
+    const email = (data.get('email') || '').trim();
+    const phone = (data.get('phone') || '').trim();
+    const links = [...linksBox.querySelectorAll('input')].map(i => i.value.trim()).filter(Boolean);
+    const fail = (msg, el) => { err.textContent = msg; el?.focus(); };
+    if (!name) return fail('Enter your name.', form.elements.name);
+    if (!links.length) return fail('Add at least one link to your social media.', linksBox.querySelector('input'));
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Enter a valid email address.', form.elements.email);
+    if (data.get('company')) return; // a bot filled the hidden field
+
+    send.disabled = true; send.textContent = 'Sending...';
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone: phone || undefined, links, source: 'web' }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (res.status === 429) throw new Error('You have sent a few applications already. Please try again in an hour.');
+      // Only the server's own field checks are worth showing word for word.
+      if (res.status === 400 && body?.error?.message) throw new Error(body.error.message);
+      if (!res.ok) throw new Error(`We couldn't send your application just now. Please try again later, or email generalinquiries@audiovibe.co.`);
+      document.getElementById('ap-done-email').textContent = email;
+      document.getElementById('ap-ref').textContent = body?.data?.reference || '';
+      document.getElementById('ap-ref').hidden = !body?.data?.reference;
+      form.hidden = true; done.hidden = false;
+      done.querySelector('[data-close]').focus();
+    } catch (x) {
+      fail(x instanceof TypeError
+        ? `We couldn't reach AudioVibe. Check your connection and try again, or email generalinquiries@audiovibe.co.`
+        : x.message);
+    } finally {
+      send.disabled = false; send.textContent = 'Apply';
+    }
+  });
+}
+
 /* ---------- Phone tour ---------- */
 const phone = document.getElementById('phone');
 const tilt = phone.parentElement;
