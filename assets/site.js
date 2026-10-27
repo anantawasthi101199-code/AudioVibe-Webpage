@@ -263,11 +263,44 @@ async function startVoice() {
 startVoice();
 new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; updateDock(); }, { threshold: 0.15 }).observe(hero);
 
-/* ---------- A day, by ear ---------- */
-const day = document.getElementById('day');
-const dayTrack = day.querySelector('.day-track');
-const moments = [...dayTrack.children];
-const dayFill = document.getElementById('day-fill');
+/* ---------- Press play, keep moving: a self-moving strip ---------- */
+// Moves on its own like a billboard. Scrolling past it never stops; a scroll
+// only gives it a brief push in the same direction.
+{
+  const day = document.getElementById('day');
+  const dayTrack = document.getElementById('day-track');
+  const toggle = document.getElementById('day-toggle');
+  [...dayTrack.children].forEach(m => {
+    const c = m.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    dayTrack.appendChild(c);
+  });
+  let x = 0, speed = 0, paused = false, slow = false, visible = false, running = false, last = 0, lastY = scrollY;
+  const BASE = 42; // px per second
+  dayTrack.addEventListener('pointerenter', () => { slow = true; });
+  dayTrack.addEventListener('pointerleave', () => { slow = false; });
+  toggle.addEventListener('click', () => {
+    paused = !paused;
+    toggle.textContent = paused ? 'Play' : 'Pause';
+    toggle.setAttribute('aria-pressed', paused);
+  });
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    day.classList.toggle('live', visible);
+    if (visible && !reduced && !running) { running = true; last = performance.now(); lastY = scrollY; requestAnimationFrame(step); }
+  }).observe(day);
+  function step(now) {
+    if (!visible) { running = false; return; }
+    const dt = Math.min((now - last) / 1000, 0.05); last = now;
+    const dy = scrollY - lastY; lastY = scrollY;
+    const target = paused ? 0 : BASE * (slow ? 0.2 : 1) + Math.min(Math.abs(dy) * 30, 600);
+    speed = lerp(speed, target, 0.08);
+    const half = dayTrack.scrollWidth / 2;
+    x = (x + speed * dt) % half;
+    dayTrack.style.transform = `translate3d(${-x}px,0,0)`;
+    requestAnimationFrame(step);
+  }
+}
 
 /* ---------- Creator flow diagram ---------- */
 {
@@ -331,7 +364,7 @@ const io = new IntersectionObserver(entries => {
     showShot(e.target.dataset.shot);
   });
   // On phones the sticky phone covers the top half, so read the step from the lower part.
-}, { rootMargin: mobile() ? '-72% 0px -22% 0px' : '-45% 0px -45% 0px' });
+}, { rootMargin: matchMedia('(max-width: 860px) and (orientation: portrait)').matches ? '-72% 0px -22% 0px' : '-45% 0px -45% 0px' });
 steps.forEach(s => io.observe(s));
 
 function applyTilt() {
@@ -351,13 +384,6 @@ if (!reduced) {
 function onScroll() {
   nav.classList.toggle('scrolled', scrollY > 40);
   if (reduced) return;
-  const r = day.getBoundingClientRect();
-  const p = clamp(-r.top / (r.height - innerHeight));
-  const travel = Math.max(0, dayTrack.scrollWidth - innerWidth);
-  dayTrack.style.transform = `translate3d(${-p * travel}px,0,0)`;
-  const on = Math.round(p * (moments.length - 1));
-  moments.forEach((m, i) => m.classList.toggle('on', i === on));
-  dayFill.style.width = `${p * 100}%`;
   const t = tour.getBoundingClientRect();
   scrollTurn = (clamp(-t.top / (t.height - innerHeight)) - 0.5) * -24;
   applyTilt();

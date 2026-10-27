@@ -132,22 +132,23 @@
     h2 { font-size: clamp(2.2rem, 5.2vw, 4.4rem); font-weight: 900; line-height: 1.02; letter-spacing: -0.035em; max-width: 16ch; }
     .lede { color: var(--muted); font-size: clamp(1.05rem, 1.4vw, 1.2rem); max-width: 48ch; margin-top: 20px; }
 
-    /* A day, by ear */
-    .day { padding: 0; height: 560vh; }
-    .day-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; }
-    .day-track { display: flex; gap: clamp(28px, 4vw, 56px); padding: 44px var(--edge) 0; will-change: transform; width: max-content; }
-    .moment { width: min(76vw, 340px); flex-shrink: 0; }
-    .scene { aspect-ratio: 240 / 150; border-radius: 24px; border: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, rgba(31,116,236,.16), rgba(8,16,30,.6)); display: grid; place-items: center; overflow: hidden; transition: border-color .5s, transform .6s cubic-bezier(.2,.8,.2,1), opacity .5s; opacity: .45; transform: scale(.94); }
-    .moment.on .scene { opacity: 1; transform: none; border-color: rgba(34,211,238,.35); }
-    .scene svg { width: 100%; height: 100%; fill: none; stroke: url(#sg); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .scene svg * { animation-play-state: paused; }
-    .moment.on .scene svg * { animation-play-state: running; }
-    .moment time { display: block; margin-top: 22px; font-size: clamp(2.8rem, 6vw, 4.6rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; color: rgba(238,244,255,.16); transition: color .5s; }
-    .moment.on time { color: var(--text); }
-    .moment h3 { font-size: 1.25rem; font-weight: 900; margin: 12px 0 6px; }
+    /* Press play, keep moving: a strip that moves on its own and never holds the scroll */
+    .day h2 { max-width: none; }
+    .marquee { position: relative; margin-top: clamp(40px, 6vh, 64px); overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+    .day-track { display: flex; gap: 2.5rem; width: max-content; will-change: transform; }
+    .moment { width: 20rem; flex-shrink: 0; }
+    .scene { aspect-ratio: 240 / 150; border-radius: 24px; border: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, rgba(31,116,236,.16), rgba(8,16,30,.6)); overflow: hidden; transition: border-color .3s; }
+    .moment:hover .scene { border-color: rgba(34,211,238,.4); }
+    .scene svg { display: block; width: 100%; height: 100%; fill: none; stroke: url(#sg); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .day:not(.live) .scene svg * { animation-play-state: paused; }
+    .moment time { display: block; margin-top: 20px; font-size: 3.4rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .moment h3 { font-size: 1.25rem; font-weight: 900; margin: 10px 0 6px; }
     .moment p { color: var(--muted); }
-    .day-progress { position: absolute; left: var(--edge); right: var(--edge); bottom: 6vh; height: 2px; background: rgba(255,255,255,.08); border-radius: 2px; }
-    .day-progress i { display: block; height: 100%; width: 0; background: var(--grad); border-radius: 2px; box-shadow: 0 0 16px rgba(34,211,238,.6); }
+    .day-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 28px; color: var(--muted); font-size: .9rem; }
+    .day-foot button { background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; cursor: pointer; color: var(--muted); font-weight: 700; font-size: .85rem; }
+    .day-foot button:hover { color: var(--text); border-color: rgba(34,211,238,.5); }
 
     /* scene animations */
     @keyframes dash { to { stroke-dashoffset: -36; } }
@@ -207,10 +208,10 @@
     .step.on { opacity: 1; }
     .step h3 { font-size: clamp(1.8rem, 3.2vw, 2.7rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
     .step p { color: var(--muted); font-size: 1.12rem; margin-top: 14px; }
-    .stage { position: sticky; top: 0; height: 100svh; display: grid; place-items: center; perspective: 1400px; }
+    .stage { position: sticky; top: 0; height: 100svh; padding-top: 72px; display: grid; place-items: center; perspective: 1400px; }
     .stage::before { content: ''; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(31,116,236,.35), transparent 65%); filter: blur(20px); }
     .tilt { transform-style: preserve-3d; transition: transform .25s ease-out; }
-    .phone { --w: min(300px, 64vw); --t: 14px; position: relative; width: var(--w); aspect-ratio: 1440 / 3120; transform-style: preserve-3d; }
+    .phone { --w: min(300px, 40vw, (100svh - 120px) * .46); --t: 14px; position: relative; width: var(--w); aspect-ratio: 1440 / 3120; transform-style: preserve-3d; }
     .phone .face { position: absolute; inset: 0; border-radius: calc(var(--w) * .13); backface-visibility: hidden; }
     .phone .front { background: #000; border: 7px solid #10151f; overflow: hidden; transform: translateZ(calc(var(--t) / 2)); box-shadow: 0 0 0 1px rgba(120,170,255,.25), 0 40px 120px -30px rgba(43,143,255,.55); }
     .phone .front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -271,23 +272,28 @@
       .nav-links.open { display: flex; }
       .menu-btn { display: block; }
       .hero { padding-top: 42svh; }
-      .tour .wrap { grid-template-columns: 1fr; gap: 0; }
-      .stage { order: -1; height: 56svh; padding-top: 60px; z-index: 2; background: linear-gradient(rgba(5,10,20,.96) 82%, transparent); }
-      .phone { --w: min(160px, 36vw); }
-      .tour-intro { min-height: 40vh; }
-      .step { min-height: 62vh; }
       .dock { grid-template-columns: 44px 1fr auto; }
       .dock .bars { display: none; }
+    }
+    /* Stacked tour only on portrait screens; a zoomed-in laptop is short and wide and keeps text beside the phone. */
+    @media (max-width: 860px) and (orientation: portrait) {
+      .tour .wrap { grid-template-columns: 1fr; gap: 0; }
+      .stage { order: -1; height: 56svh; padding-top: 60px; z-index: 2; background: linear-gradient(rgba(5,10,20,.96) 82%, transparent); }
+      .phone { --w: min(160px, 36vw, (56svh - 80px) * .46); }
+      .tour-intro { min-height: 40vh; }
+      .step { min-height: 62vh; }
+    }
+    @media (max-height: 560px) {
+      .step { min-height: 80vh; }
+      .step h3 { font-size: 1.6rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; }
       .reveal { opacity: 1; transform: none; }
-      .day { height: auto; }
-      .day-pin { position: static; height: auto; padding: 100px 0; }
+      .marquee { -webkit-mask-image: none; mask-image: none; padding: 0 var(--gutter); }
       .day-track { flex-wrap: wrap; width: auto; transform: none !important; }
-      .moment time { color: var(--text); }
-      .scene { opacity: 1; transform: none; }
-      .day-progress { display: none; }
+      .day-track [aria-hidden] { display: none; }
+      .day-foot button { display: none; }
     }
   </style>
 </head>
@@ -304,7 +310,7 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <ul class="nav-links" id="links">
-      <li><a href="#day">A day, by ear</a></li>
+      <li><a href="#day">Your day</a></li>
       <li><a href="#creators">For creators</a></li>
       <li><a href="#tour">The app</a></li>
       <li><a href="#originals">Originals</a></li>
@@ -361,12 +367,12 @@
   </section>
 
   <section class="day" id="day">
-    <div class="day-pin">
-      <div class="wrap">
-        <h2>A day, by ear</h2>
-        <p class="lede">Most of the day your hands and eyes are already taken. AudioVibe fits into the gaps.</p>
-      </div>
-      <div class="day-track">
+    <div class="wrap">
+      <h2>Press play, keep moving</h2>
+      <p class="lede">Driving, walking, running, cooking, falling asleep. AudioVibe plays through the parts of the day when your eyes are busy.</p>
+    </div>
+    <div class="marquee">
+      <div class="day-track" id="day-track">
         <article class="moment">
           <div class="scene" aria-hidden="true"><svg viewBox="0 0 240 150">
             <circle cx="192" cy="40" r="10"/><path d="M186 22v-6M206 34h6M200 26l4-4"/>
@@ -426,7 +432,10 @@
           <time>23:10</time><h3>Lights out</h3><p>Set the sleep timer. It fades out and stops, so you don't have to reach for the phone.</p>
         </article>
       </div>
-      <div class="day-progress" aria-hidden="true"><i id="day-fill"></i></div>
+    </div>
+    <div class="wrap day-foot">
+      <span>Hover to slow it down.</span>
+      <button type="button" id="day-toggle" aria-pressed="false">Pause</button>
     </div>
   </section>
 
