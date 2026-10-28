@@ -14,7 +14,10 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://audiovibe.co/" />
   <meta property="og:image" content="https://audiovibe.co/og/default.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:image:width" content="800" />
+  <meta property="og:image:height" content="800" />
+  <meta property="og:image:alt" content="The AudioVibe logo" />
+  <meta name="twitter:card" content="summary" />
   <meta name="twitter:image" content="https://audiovibe.co/og/default.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -298,12 +301,23 @@
     }
     /* Stacked tour only on portrait screens; a zoomed-in laptop is short and wide and keeps text beside the phone. */
     @media (max-width: 860px) and (orientation: portrait) {
-      .tour .wrap { grid-template-columns: 1fr; gap: 0; }
-      .stage { order: -1; height: 56svh; padding-top: 60px; z-index: 2; background: linear-gradient(rgba(5,10,20,.96) 82%, transparent); }
-      .phone { --w: min(160px, 36vw, (56svh - 80px) * .46); }
-      .tour-intro { min-height: 40vh; }
-      .step { min-height: 62vh; }
-      .float, .stage::after { display: none; }
+      /* one pinned panel: phone on top, the active text fading in below */
+      .tour { padding: 0; height: calc(100svh + 6 * 60svh); }
+      .tour .wrap { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; gap: 0; padding-top: 64px; padding-bottom: 20px; }
+      .stage { position: relative; top: auto; flex: 1 1 auto; height: auto; min-height: 0; padding-top: 0; }
+      .stage::after { display: none; }
+      .phone { --w: min(176px, 40vw, (100svh - 64px - 36svh - 40px) * .46); }
+      .tour-steps { position: relative; flex: 0 0 36svh; }
+      .tour-intro, .step { position: absolute; inset: 0; min-height: 0; max-width: none; justify-content: flex-start; opacity: 0; transform: translateY(10px); transition: opacity .4s, transform .4s; pointer-events: none; }
+      .tour-intro.on, .step.on { opacity: 1; transform: none; pointer-events: auto; }
+      .tour-intro h2 { font-size: 1.75rem; }
+      .float { max-width: 150px; padding: 7px 10px 7px 7px; gap: 8px; border-radius: 14px; }
+      .float .fi { width: 28px; height: 28px; border-radius: 9px; }
+      .float .fi svg { width: 15px; height: 15px; }
+      .float b { font-size: .74rem; }
+      .float div span { font-size: .64rem; }
+      .float.a { left: 68%; top: 8%; }
+      .float.b { right: 68%; bottom: 10%; }
     }
     @media (max-height: 560px) {
       .step { min-height: 80vh; }

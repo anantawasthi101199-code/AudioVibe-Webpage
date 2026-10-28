@@ -513,7 +513,6 @@ const shot = document.getElementById('shot');
 const tour = document.getElementById('tour');
 const steps = [...tour.querySelectorAll('.step')];
 steps.forEach(s => { new Image().src = `assets/shots/${s.dataset.shot}.webp`; });
-let currentShot = 'for-you', spin, swapTimer;
 const pointer = { x: 0, y: 0 };
 let scrollTurn = 0;
 
@@ -550,26 +549,58 @@ function setFloats(name) {
 }
 setFloats('for-you');
 
-function showShot(name) {
-  if (name === currentShot) return;
-  currentShot = name;
+// The phone turns edge-on, swaps its screen, and turns back. A flip is never
+// cancelled half way: if the step changes again mid-flip, the flip simply lands
+// on the newest screen, so fast scrolling in either direction can't leave it stuck.
+let shown = 'for-you', wanted = 'for-you', flipping = false;
+function applyShot(name) {
+  shown = name;
+  shot.src = `assets/shots/${name}.webp`;
+  setFloats(name);
+}
+async function flip() {
+  if (flipping || wanted === shown) return;
+  flipping = true;
   floats.forEach(f => f.classList.add('out'));
-  const swap = () => { shot.src = `assets/shots/${name}.webp`; setFloats(name); floats.forEach(f => f.classList.remove('out')); };
-  if (reduced) return swap();
-  spin?.cancel(); clearTimeout(swapTimer);
-  spin = phone.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(360deg)' }],
-    { duration: 1100, easing: 'cubic-bezier(.65,0,.35,1)' });
-  swapTimer = setTimeout(swap, 550);
+  await phone.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(90deg)' }], { duration: 200, easing: 'ease-in' }).finished;
+  applyShot(wanted);
+  await phone.animate([{ transform: 'rotateY(-90deg)' }, { transform: 'rotateY(0deg)' }], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' }).finished;
+  floats.forEach(f => f.classList.remove('out'));
+  flipping = false;
+  if (wanted !== shown) flip();
+}
+function showShot(name) {
+  wanted = name;
+  if (reduced) { if (wanted !== shown) applyShot(wanted); return; }
+  flip();
+}
+
+// Phones (portrait): the whole tour is one pinned panel and the scroll position
+// alone picks the step; the text fades in place under the phone.
+// Wider screens: text scrolls beside the pinned phone and the step in the middle
+// of the screen is the active one.
+const stacked = matchMedia('(max-width: 860px) and (orientation: portrait)');
+const intro = tour.querySelector('.tour-intro');
+const items = [intro, ...steps];
+let activeItem = -1;
+function setItem(i) {
+  if (i === activeItem) return;
+  activeItem = i;
+  items.forEach((el, j) => el.classList.toggle('on', j === i));
+  showShot(i <= 0 ? 'for-you' : steps[i - 1].dataset.shot);
+}
+function tourByScroll() {
+  if (!stacked.matches) return;
+  const r = tour.getBoundingClientRect();
+  const p = clamp(-r.top / Math.max(r.height - innerHeight, 1));
+  setItem(Math.min(items.length - 1, Math.floor(p * items.length)));
 }
 const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    steps.forEach(s => s.classList.toggle('on', s === e.target));
-    showShot(e.target.dataset.shot);
-  });
-  // On phones the sticky phone covers the top half, so read the step from the lower part.
-}, { rootMargin: matchMedia('(max-width: 860px) and (orientation: portrait)').matches ? '-72% 0px -22% 0px' : '-45% 0px -45% 0px' });
+  if (stacked.matches) return;
+  entries.forEach(e => { if (e.isIntersecting) setItem(items.indexOf(e.target)); });
+}, { rootMargin: '-45% 0px -45% 0px' });
 steps.forEach(s => io.observe(s));
+stacked.addEventListener('change', () => { activeItem = -1; tourByScroll(); });
 
 function applyTilt() {
   tilt.style.transform = `rotateX(${-pointer.y * 16}deg) rotateY(${pointer.x * 26 + scrollTurn}deg)`;
@@ -587,7 +618,8 @@ if (!reduced) {
 /* ---------- Scroll-driven bits ---------- */
 function onScroll() {
   nav.classList.toggle('scrolled', scrollY > 40);
-  if (reduced) return;
+  if (reduced) { tourByScroll(); return; }
+  tourByScroll();
   const t = tour.getBoundingClientRect();
   scrollTurn = (clamp(-t.top / (t.height - innerHeight)) - 0.5) * -24;
   applyTilt();
