@@ -438,7 +438,7 @@
       <li><a href="#tour">The app</a></li>
       <li><a href="#originals">Originals</a></li>
       <li><a href="support.html">Support</a></li>
-      <li><a class="pill small" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">Get the app</a></li>
+      <li><a class="pill small" href="#download">Get the app</a></li>
     </ul>
   </div>
 </nav>
@@ -455,11 +455,14 @@
         <div class="hero-copy reveal d2">
           <p>AudioVibe is a feed you listen to. Stories, news, science, comedy and calm, for the hours you can't look at a screen.</p>
           <div class="actions">
-            <a class="pill" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">
+            <a class="pill" data-store="play" href="https://play.google.com/store/apps/details?id=co.audiovibe&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dsite%26utm_campaign%3Dhero" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3.5v17l15-8.5z"/></svg>
               Get it on Google Play
             </a>
-            <span class="pill ghost" aria-disabled="true">App Store coming soon</span>
+            <a class="pill" data-store="ios" href="https://apps.apple.com/app/id6773122040" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c1.2-2.2 3-3.4 5-3.3.2 2-.6 3.7-1.9 4.9"/><path d="M18.7 16.5c-.7 1.7-1.6 3.3-2.9 4.4-.9.8-2 .9-3 .4-1-.5-2.1-.5-3.1 0-1 .5-2.1.4-3-.4C4.4 18.7 3 15.3 3 12.4 3 9.2 5.1 7.4 7.4 7.4c1.1 0 2 .4 2.8.7.6.2 1 .2 1.6 0 .8-.3 1.8-.7 3-.7 1.7 0 3.2.8 4.1 2.1-2 1.3-2.4 4.2-.2 5.7z"/></svg>
+              Download on the App Store
+            </a>
           </div>
         </div>
         <div class="np reveal d3" id="np" aria-label="Sample player">
@@ -627,11 +630,14 @@
       <div class="beacon" aria-hidden="true"><span></span><span></span><span></span><img class="icon-tile" src="assets/av-icon.png" alt="" /></div>
       <h2><span>Put the phone away.</span> <span class="grad">Keep listening.</span></h2>
       <div class="actions">
-        <a class="pill" href="https://play.google.com/store/apps/details?id=co.audiovibe" target="_blank" rel="noopener">
+        <a class="pill" data-store="play" href="https://play.google.com/store/apps/details?id=co.audiovibe&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dsite%26utm_campaign%3Ddownload" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3.5v17l15-8.5z"/></svg>
           Get it on Google Play
         </a>
-        <span class="pill ghost" aria-disabled="true">App Store coming soon</span>
+        <a class="pill" data-store="ios" href="https://apps.apple.com/app/id6773122040" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c1.2-2.2 3-3.4 5-3.3.2 2-.6 3.7-1.9 4.9"/><path d="M18.7 16.5c-.7 1.7-1.6 3.3-2.9 4.4-.9.8-2 .9-3 .4-1-.5-2.1-.5-3.1 0-1 .5-2.1.4-3-.4C4.4 18.7 3 15.3 3 12.4 3 9.2 5.1 7.4 7.4 7.4c1.1 0 2 .4 2.8.7.6.2 1 .2 1.6 0 .8-.3 1.8-.7 3-.7 1.7 0 3.2.8 4.1 2.1-2 1.3-2.4 4.2-.2 5.7z"/></svg>
+              Download on the App Store
+            </a>
       </div>
       <p class="lede">Free to download. Free to listen.</p>
     </div>
@@ -707,6 +713,17 @@
 
 <audio id="sample" preload="metadata"></audio>
 
+<script>
+  // ?src=ig_bio on any audiovibe.co link becomes the Play utm_source, so
+  // installs show up per channel in Play Console (Audio-Vibe/docs/GROWTH_PLAN.md).
+  (function () {
+    var src = new URLSearchParams(location.search).get('src');
+    if (!src || !/^[a-z0-9_-]{1,30}$/i.test(src)) return;
+    document.querySelectorAll('a[data-store="play"]').forEach(function (a) {
+      a.href = a.href.replace('utm_source%3Dwebsite', 'utm_source%3D' + src.toLowerCase());
+    });
+  })();
+</script>
 <script type="importmap">{ "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
   "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.mjs"
